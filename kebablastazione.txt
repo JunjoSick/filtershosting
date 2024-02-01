@@ -1,0 +1,31 @@
+! Title: youtubesuckssobad
+! Description: m'importa 'na sega
+! Author: JunjoSick
+! Version: 1.0
+! Expires: 365 days
+! Homepage: https://github.com/JunjoSick/filtershosting
+! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
+! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/master/kebablastazione.txt
+
+! Hide sections suggesting content based on related searches.
+youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/From related searches/i))
+
+! Remove recommendations for recently uploaded content.
+youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/Recently uploaded/i))
+
+! Block previously watched videos from resurfacing.
+youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/Previously watched/i))
+! Streamline search results by removing secondary search containers and results renderers.
+youtube.com###contents > .ytd-secondary-search-container-renderer.style-scope
+youtube.com###secondary > .ytd-two-column-search-results-renderer
+
+! Exclude horizontal card lists and shelf renderers cluttering the interface.
+youtube.com##ytd-horizontal-card-list-renderer.ytd-item-section-renderer.style-scope
+youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/Learn while you're at home/i))
+youtube.com##ytd-horizontal-card-list-renderer.ytd-item-section-renderer.style-scope:has(span:has-text(/Searches related to/i))
+
+! Block prompts to watch content again or explore what others have watched.
+youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/Watch again/i))
+youtube.com###contents > ytd-shelf-renderer:has-text(/For you/)
+youtube.com##ytd-shelf-renderer:has-text(/People also watched/)
+youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/Related to your search/i))
