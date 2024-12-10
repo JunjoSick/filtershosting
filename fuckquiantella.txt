@@ -1,8 +1,8 @@
 ! Title: fuckquiantella
 ! Description: Filter to block ads on QuiAntella's site, might break from time to time
 ! Author: JunjoSick
-! Version: 3.0
-! Expires: 69 days
+! Version: 3.1
+! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
 ! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckquiantella.txt
@@ -16,6 +16,7 @@ quiantella.it##section[id="media_image-63"]
 www.quiantella.it##[href="https://www.facebook.com/Amicimieialpoggio/"]
 www.quiantella.it##[href="https://www.facebook.com/tommasina.tommasina.5"]
 www.quiantella.it##[href="http://www.ilperuzzicasa.it/it/default.asp"]
+||www.quiantella.it/wp-content/uploads/2024/12/2fcef6d8-3aa4-4d7d-8ced-0a1750e9cc93*.jpg$image 
 
 !Block ads on the homepage
 www.quiantella.it##[href="https://www.ilperuzzicasa.it/it/default.asp"] > .lazyloaded.ls-is-cached
