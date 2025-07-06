@@ -6,7 +6,7 @@ Hosts my personal filters
 `https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckquiantella.txt`
 
 ## fuckdaicollifiorentini
-[subscribe](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckdaicollifiorentini.txt)
+[subscribe](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckdaicollifiorentini.txt?_=raw&title=fuckdaicollifiorentini)
 `https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckdaicollifiorentini.txt`
 
 ## youtubecazzimm
