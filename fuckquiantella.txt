@@ -1,13 +1,13 @@
 ! Title: fuckquiantella
 ! Description: Filter to block ads on QuiAntella's site, might break from time to time
 ! Author: JunjoSick
-! Version: 4.0.1
+! Version: 5.0.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
 ! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckquiantella.txt
 
-!Blocks ads on articles
+!Block ads on articles
 quiantella.it##section[id="media_image-84"]
 quiantella.it##section[id="media_image-69"] 
 quiantella.it##section[id="media_image-53"] 
@@ -53,5 +53,9 @@ quiantella.it##img[data-id="70923"]
 quiantella.it##img[data-id="70928"]
 www.quiantella.it##.swiper-pagination-custom.swiper-pagination-white.swiper-pagination.wp-block-jetpack-slideshow_pagination
 
-! Block advertisement on articles thumbnail
+!Block advertisement on articles thumbnail
 ||i0.wp.com/www.quiantella.it/wp-content/uploads/2020/06/scm_def.jpg$image
+
+!Block self-promotion
+||www.quiantella.it/wp-content/uploads/2016/03/ViolaAmoreefantasia*.png$image
+www.quiantella.it###rss-3
