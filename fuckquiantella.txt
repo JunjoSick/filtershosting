@@ -1,7 +1,7 @@
 ! Title: fuckquiantella
-! Description: Filter to block ads on QuiAntella's site, might break from time to time
+! Description: Filter to block ads on QuiAntella's website, might break from time to time
 ! Author: JunjoSick
-! Version: 5.0.0
+! Version: 5.0.1
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
