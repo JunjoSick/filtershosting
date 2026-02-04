@@ -1,7 +1,7 @@
 ! Title: fuckquiantella
 ! Description: Filter to block ads on QuiAntella's website, might break from time to time
 ! Author: JunjoSick
-! Version: 5.0.1
+! Version: 6.0.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -20,6 +20,17 @@ www.quiantella.it##[href="http://www.ilperuzzicasa.it/it/default.asp"]
 www.quiantella.it##.lazyloaded.ls-is-cached.size-full.attachment-full.wp-image-83243.image
 ||www.quiantella.it/wp-content/uploads/2025/03/POP-UP-PRIMA-PAGINA*.jpg$image
 
+
+! Block using references
+quiantella.it##.entry-content p:has-text(Il Peruzzi Immobiliare)
+quiantella.it##.entry-content p:has-text(Per informazioni: Il Peruzzi)
+! Block separator lines before ads
+quiantella.it##.entry-content p:-abp-contains(/^[—–-]{20,}$/)
+
+! Add other agencies as you find them
+! quiantella.it##.entry-content p:has-text(AGENCY NAME HERE)
+
+
 !Block ads on the homepage
 www.quiantella.it##[href="https://www.ilperuzzicasa.it/it/default.asp"] > .lazyloaded.ls-is-cached
 www.quiantella.it##.has-md-margin-top.size-large.wp-block-image > [href="https://www.facebook.com/Amicimieialpoggio/"]
@@ -28,7 +39,7 @@ www.quiantella.it##.is-resized.size-large.wp-block-image > [href="https://www.il
 www.quiantella.it##[href="https://www.guidaturisticaperfirenze.com"]
 www.quiantella.it##figure.size-full.wp-block-image > [href="http://travellisrl.com/progetti/realizzazione-di-immobili-situati-in-impruneta/"]
 
-!Blocks the advertising carousel on some articles 
+!Blocks the advertising carousel on some articles (legacy, will probably be refactored)
 quiantella.it##img[data-id="70940"]
 quiantella.it##img[data-id="70984"]
 quiantella.it##img[data-id="70985"]
@@ -59,3 +70,4 @@ www.quiantella.it##.swiper-pagination-custom.swiper-pagination-white.swiper-pagi
 !Block self-promotion
 ||www.quiantella.it/wp-content/uploads/2016/03/ViolaAmoreefantasia*.png$image
 www.quiantella.it###rss-3
+
