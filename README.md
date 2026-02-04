@@ -5,7 +5,7 @@ Hosts my personal filters
 [subscribe](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckquiantella.txt?_=raw&title=fuckquiantella)
 `https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckquiantella.txt`
 
-### fuckquiantella (userscript)
+## fuckquiantella (userscript)
 [install](https://raw.githubusercontent.com/JunjoSick/filtershosting/master/quiantella-adblocker.user.js)
 
 ## fuckdaicollifiorentini
