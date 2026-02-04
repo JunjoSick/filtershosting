@@ -1,94 +1,117 @@
 // ==UserScript==
 // @name         QuiAntella Inline Ad Blocker
-// @namespace    http://tampermonkey.net/
-// @version      1.0.0
+// @namespace    https://github.com/JunjoSick/filtershosting
+// @version      1.1.0
 // @description  Removes inline real estate ads from QuiAntella articles
 // @author       JunjoSick
 // @match        https://www.quiantella.it/*
 // @grant        none
 // @run-at       document-end
+// @updateURL    https://raw.githubusercontent.com/JunjoSick/filtershosting/master/quiantella-adblocker.user.js
+// @downloadURL  https://raw.githubusercontent.com/JunjoSick/filtershosting/master/quiantella-adblocker.user.js
 // ==/UserScript==
 
 (function () {
   "use strict";
 
-  // Advertisers to detect (add more as needed)
-  const AD_CONTACTS = [
-    "Il Peruzzi Immobiliare",
-    "Per informazioni:",
-    // Add new agencies here as they appear
-  ];
+  const PROPERTY_TITLE_REGEX =
+    /\b(appartamento|villa|casa|immobile|locale|terreno|bilocale|trilocale|attico|mansarda|rustico|colonica|podere)\b.{0,50}\b(in\s+)?(vendita|affitto)\b/i;
 
-  // Real estate keywords for h3 detection
-  const PROPERTY_KEYWORDS =
-    /\b(vendita|affitto|in vendita|in affitto)\b.*\b(appartamento|villa|casa|immobile|locale|terreno|bilocale|trilocale)\b/i;
+  const PROPERTY_TITLE_REGEX_ALT =
+    /\b(in\s+)?(vendita|affitto)\b.{0,50}\b(appartamento|villa|casa|immobile|locale|terreno|bilocale|trilocale|attico|mansarda|rustico|colonica|podere)\b/i;
+
+  function isPropertyTitle(text) {
+    return (
+      PROPERTY_TITLE_REGEX.test(text) || PROPERTY_TITLE_REGEX_ALT.test(text)
+    );
+  }
+
+  function isSeparatorLine(el) {
+    return (
+      el?.tagName?.toLowerCase() === "p" &&
+      /^[—–-]{10,}\s*$/.test(el.textContent.trim())
+    );
+  }
+
+  function isAllCapsRealEstate(el) {
+    if (el?.tagName?.toLowerCase() !== "p") return false;
+    const text = el.textContent.trim();
+    return (
+      text.length > 100 &&
+      text === text.toUpperCase() &&
+      /\b(MQ|APPARTAMENTO|BAGNI|CAMERE|IMMOBILE|PIANO|GIARDINO|TERRAZZA)\b/.test(
+        text
+      )
+    );
+  }
+
+  function isContactInfo(el) {
+    if (el?.tagName?.toLowerCase() !== "p") return false;
+    const text = el.textContent.trim();
+    return (
+      /\bPer informazioni\b/i.test(text) ||
+      /\bImmobiliare\b.*\d{6,}/.test(text) ||
+      /\b(055|333|334|335|338|339|347|348|349|366|388|392|393)\d{6,}/.test(text)
+    );
+  }
+
+  function isSlideshow(el) {
+    return el?.classList?.contains("wp-block-jetpack-slideshow");
+  }
 
   function removeAds() {
     const content = document.querySelector(".entry-content-single");
     if (!content) return;
 
-    let removed = 0;
+    const toRemove = [];
 
-    // 1. Find and remove ad contact paragraphs + nearby elements
-    content.querySelectorAll("p").forEach((p) => {
-      const text = p.textContent.trim();
+    content.querySelectorAll("h3").forEach((h3) => {
+      const titleText = h3.textContent.trim();
+      if (!isPropertyTitle(titleText)) return;
 
-      // Contact info paragraph
-      if (AD_CONTACTS.some((keyword) => text.includes(keyword))) {
-        // Walk backwards and remove related elements
-        let sibling = p.previousElementSibling;
-        while (sibling) {
-          const prev = sibling.previousElementSibling;
-          const tagName = sibling.tagName.toLowerCase();
-          const sibText = sibling.textContent.trim();
+      const adBlock = [h3];
 
-          // ALL CAPS description (real estate jargon)
-          if (
-            tagName === "p" &&
-            sibText.length > 100 &&
-            sibText === sibText.toUpperCase() &&
-            /\b(MQ|APPARTAMENTO|BAGNI|CAMERE|IMMOBILE)\b/.test(sibText)
-          ) {
-            sibling.remove();
-            removed++;
-          }
-          // Jetpack slideshow
-          else if (sibling.classList.contains("wp-block-jetpack-slideshow")) {
-            sibling.remove();
-            removed++;
-          }
-          // Property title h3
-          else if (tagName === "h3" && PROPERTY_KEYWORDS.test(sibText)) {
-            sibling.remove();
-            removed++;
-          }
-          // Separator line
-          else if (tagName === "p" && /^[—–-]{10,}\s*$/.test(sibText)) {
-            sibling.remove();
-            removed++;
-          } else {
-            // Stop when we hit unrelated content
-            break;
-          }
+      const prev = h3.previousElementSibling;
+      if (isSeparatorLine(prev)) {
+        adBlock.push(prev);
+      }
 
-          sibling = prev;
+      let next = h3.nextElementSibling;
+      let safety = 0;
+
+      while (next && safety < 5) {
+        if (isSlideshow(next)) {
+          adBlock.push(next);
+        } else if (isAllCapsRealEstate(next)) {
+          adBlock.push(next);
+        } else if (isContactInfo(next)) {
+          adBlock.push(next);
+          break;
+        } else {
+          break;
         }
+        next = next.nextElementSibling;
+        safety++;
+      }
 
-        p.remove();
-        removed++;
+      if (adBlock.length >= 2) {
+        toRemove.push(...adBlock);
       }
     });
 
-    if (removed > 0) {
-      console.log(`[QuiAntella Ad Blocker] Removed ${removed} ad elements`);
+    const uniqueElements = [...new Set(toRemove)];
+    uniqueElements.forEach((el) => el.remove());
+
+    if (uniqueElements.length > 0) {
+      console.log(
+        `[QuiAntella Ad Blocker] Removed ${uniqueElements.length} ad elements`
+      );
     }
   }
 
-  // Run immediately and after short delay (for lazy-loaded content)
   removeAds();
   setTimeout(removeAds, 1500);
 
-  // Optional: observe for dynamic content
   const observer = new MutationObserver(() => removeAds());
   const target = document.querySelector(".entry-content-single");
   if (target) {
