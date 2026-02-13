@@ -1,7 +1,7 @@
 ! Title: fuckdaicollifiorentini
 ! Description: Filter to block ads on Dai Colli Fiorentini's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.1.1
+! Version: 1.2.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -24,7 +24,9 @@ daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/20
 daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2025/05/IMG_6934.jpg"]
 daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2023/11/TUTTAUTO-mobile.gif"]
 daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2025/02/2000x500-SPORT_La-tua-vita-la-tua-acqua-SOCIAL.jpg"]
+daicollifiorentini.it###header__nexal .elementor-widget-shortcode
 
 !Block self-promotion
 daicollifiorentini.it##.elementor-widget-container > .ads__cta
+
 
