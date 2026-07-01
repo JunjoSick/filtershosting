@@ -7,8 +7,8 @@
 // @match        https://www.quiantella.it/*
 // @grant        none
 // @run-at       document-end
-// @updateURL    https://raw.githubusercontent.com/JunjoSick/filtershosting/master/quiantella-adblocker.user.js
-// @downloadURL  https://raw.githubusercontent.com/JunjoSick/filtershosting/master/quiantella-adblocker.user.js
+// @updateURL    https://raw.githubusercontent.com/JunjoSick/filtershosting/main/quiantella-adblocker.user.js
+// @downloadURL  https://raw.githubusercontent.com/JunjoSick/filtershosting/main/quiantella-adblocker.user.js
 // ==/UserScript==
 
 (function () {

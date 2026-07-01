@@ -5,7 +5,7 @@
 ! Expires: 365 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
-! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/master/kebablastazione.txt
+! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/kebablastazione.txt
 
 ! Hide sections suggesting content based on related searches.
 youtube.com##ytd-shelf-renderer.style-scope:has(span:has-text(/From related searches/i))

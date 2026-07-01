@@ -1,74 +1,100 @@
 ! Title: fuckquiantella
 ! Description: Filter to block ads on QuiAntella's website, might break from time to time
 ! Author: JunjoSick
-! Version: 6.2.0
+! Version: 6.4.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
-! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/master/fuckquiantella.txt
+! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckquiantella.txt
 
-! Block ads on articles
-quiantella.it##section[id="media_image-84"]
-quiantella.it##section[id="media_image-69"]
-quiantella.it##section[id="media_image-53"]
-quiantella.it##section[id="media_image-88"]
-quiantella.it##section[id="media_image-63"]
-quiantella.it##section[id="media_image-57"]
-www.quiantella.it##[href="https://www.facebook.com/Amicimieialpoggio/"]
-www.quiantella.it##[href="https://www.facebook.com/tommasina.tommasina.5"]
-www.quiantella.it##[href="http://www.ilperuzzicasa.it/it/default.asp"]
-||www.quiantella.it/wp-content/uploads/2024/12/2fcef6d8-3aa4-4d7d-8ced-0a1750e9cc93*.jpg$image
-www.quiantella.it##.lazyloaded.ls-is-cached.size-full.attachment-full.wp-image-83243.image
+! Static image campaigns and popups
+! 2026-06 TUGA homepage/sidebar banner
+||www.quiantella.it/wp-content/uploads/2026/06/TUGA_banner_formato_originale*.gif$image
+! 2024 Tommasina homepage/sidebar banner
+||www.quiantella.it/wp-content/uploads/2024/03/banner_tommasina-1.gif$image
+! 2023 Giulia Bacci homepage/sidebar banner
+||www.quiantella.it/wp-content/uploads/2023/03/BannerGiuliaBacci*.jpg$image
+! 2025 homepage popup
 ||www.quiantella.it/wp-content/uploads/2025/03/POP-UP-PRIMA-PAGINA*.jpg$image
+! 2024 real-estate image campaign
+||www.quiantella.it/wp-content/uploads/2024/12/2fcef6d8-3aa4-4d7d-8ced-0a1750e9cc93*.jpg$image
+! Article thumbnail ad
+||i0.wp.com/www.quiantella.it/wp-content/uploads/2020/06/scm_def.jpg$image
+! Site self-promotion
+||www.quiantella.it/wp-content/uploads/2016/03/ViolaAmoreefantasia*.png$image
 
-! Inline ad contact info (backup for userscript)
+! Lazy-loaded WordPress ad figures
+! WP Smush uses data-src/data-srcset with a placeholder src; collapse the wrapper too.
+quiantella.it#?#figure:has(img.wp-image-96103)
+quiantella.it#?#figure:has(img.wp-image-74415)
+quiantella.it#?#figure:has(img.wp-image-65406)
+quiantella.it#?#figure:has(img.wp-image-5351)
+quiantella.it##img.wp-image-96103
+quiantella.it##img.wp-image-74415
+quiantella.it##img.wp-image-65406
+quiantella.it##img.wp-image-5351
+quiantella.it##img[data-src*="/TUGA_banner_formato_originale"]
+quiantella.it##img[data-src*="/banner_tommasina-1"]
+quiantella.it##img[data-src*="/BannerGiuliaBacci"]
+quiantella.it##img[data-src*="/ViolaAmoreefantasia"]
+
+! WordPress media widgets
+quiantella.it###media_image-53
+quiantella.it###media_image-57
+quiantella.it###media_image-63
+quiantella.it###media_image-69
+quiantella.it###media_image-84
+quiantella.it###media_image-88
+quiantella.it##.wp-image-83243
+
+! Sponsor and social promo links
+quiantella.it##a[href="http://www.ilperuzzicasa.it/it/default.asp"]
+quiantella.it##a[href="http://travellisrl.com/progetti/realizzazione-di-immobili-situati-in-impruneta/"]
+quiantella.it##a[href="https://www.facebook.com/Amicimieialpoggio/"]
+quiantella.it##a[href="https://www.facebook.com/share/1EfYytZnsK/"]
+quiantella.it##a[href="https://www.facebook.com/tommasina.tommasina.5"]
+quiantella.it##a[href="https://www.guidaturisticaperfirenze.com"]
+
+! Inline real-estate ad fallbacks (backup for userscript)
+! uBO-compatible text rules
 quiantella.it##.entry-content p:has-text(Il Peruzzi Immobiliare)
 quiantella.it##.entry-content p:has-text(Per informazioni: Il Peruzzi)
-
-! Separator lines before ads
 quiantella.it##.entry-content p:-abp-contains(/^[—–-]{10,}\s*$/)
+! AdGuard ExtendedCss equivalents
+quiantella.it#?#.entry-content p:contains(Il Peruzzi Immobiliare)
+quiantella.it#?#.entry-content p:contains(Per informazioni: Il Peruzzi)
+quiantella.it#?#.entry-content p:contains(/^[—–-]{10,}\s*$/)
 
-! Add other agencies as you find them
+! Add other agencies here as they appear
 ! quiantella.it##.entry-content p:has-text(AGENCY NAME HERE)
+! quiantella.it#?#.entry-content p:contains(AGENCY NAME HERE)
 
-! Block ads on the homepage
-www.quiantella.it##[href="https://www.ilperuzzicasa.it/it/default.asp"] > .lazyloaded.ls-is-cached
-www.quiantella.it##.has-md-margin-top.size-large.wp-block-image > [href="https://www.facebook.com/Amicimieialpoggio/"]
-www.quiantella.it##.is-resized.size-full.wp-block-image > [href="https://www.facebook.com/tommasina.tommasina.5"]
-www.quiantella.it##.is-resized.size-large.wp-block-image > [href="https://www.ilperuzzicasa.it/it/default.asp"]
-www.quiantella.it##[href="https://www.guidaturisticaperfirenze.com"]
-www.quiantella.it##figure.size-full.wp-block-image > [href="http://travellisrl.com/progetti/realizzazione-di-immobili-situati-in-impruneta/"]
-
-! Legacy carousel image blocking (keep for old articles)
+! Legacy carousel cleanup (keep for old articles)
+quiantella.it##img[data-id="70921"]
+quiantella.it##img[data-id="70922"]
+quiantella.it##img[data-id="70923"]
+quiantella.it##img[data-id="70925"]
+quiantella.it##img[data-id="70926"]
+quiantella.it##img[data-id="70927"]
+quiantella.it##img[data-id="70928"]
+quiantella.it##img[data-id="70929"]
+quiantella.it##img[data-id="70930"]
+quiantella.it##img[data-id="70931"]
+quiantella.it##img[data-id="70932"]
+quiantella.it##img[data-id="70933"]
+quiantella.it##img[data-id="70934"]
+quiantella.it##img[data-id="70935"]
+quiantella.it##img[data-id="70936"]
+quiantella.it##img[data-id="70937"]
+quiantella.it##img[data-id="70938"]
+quiantella.it##img[data-id="70939"]
 quiantella.it##img[data-id="70940"]
 quiantella.it##img[data-id="70984"]
 quiantella.it##img[data-id="70985"]
 quiantella.it##img[data-id="70992"]
-quiantella.it##img[data-id="70927"]
-quiantella.it##img[data-id="70921"]
-quiantella.it##img[data-id="70931"]
-quiantella.it##img[data-id="70925"]
-quiantella.it##img[data-id="70937"]
-quiantella.it##img[data-id="70922"]
-quiantella.it##img[data-id="70939"]
-quiantella.it##img[data-id="70938"]
-quiantella.it##img[data-id="70936"]
-quiantella.it##img[data-id="70935"]
-quiantella.it##img[data-id="70929"]
-quiantella.it##img[data-id="70930"]
-quiantella.it##img[data-id="70932"]
-quiantella.it##img[data-id="70933"]
-quiantella.it##img[data-id="70934"]
-quiantella.it##img[data-id="70926"]
-quiantella.it##img[data-id="70923"]
-quiantella.it##img[data-id="70928"]
-www.quiantella.it##.swiper-pagination-custom.swiper-pagination-white.swiper-pagination.wp-block-jetpack-slideshow_pagination
+quiantella.it##.wp-block-jetpack-slideshow_pagination.swiper-pagination-custom
 
-! Block advertisement on articles thumbnail
-||i0.wp.com/www.quiantella.it/wp-content/uploads/2020/06/scm_def.jpg$image
-
-! Block self-promotion
-||www.quiantella.it/wp-content/uploads/2016/03/ViolaAmoreefantasia*.png$image
-www.quiantella.it###rss-3
+! Sidebar/site chrome
+quiantella.it###rss-3
 
 
