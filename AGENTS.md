@@ -20,6 +20,10 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
 - Prefer narrow, site-specific filters over broad selectors that could hide editorial content.
 - Prefer durable ad identifiers such as exact linked domains, image URLs, widget IDs/classes, or stable ad container attributes.
 - For AdGuard for Android compatibility, prefer network image rules plus plain CSS attribute selectors. When text matching or parent selection is needed, add AdGuard ExtendedCss rules with `#?#` and keep uBO alternatives only when they add useful cross-client coverage.
+- For lazy-loaded QuiAntella WordPress banner ads, the confirmed Android-safe pattern is:
+  - `||www.quiantella.it/wp-content/uploads/YYYY/MM/ad-file*.ext$image`
+  - `quiantella.it##img[data-src*="/ad-file"]`
+  - `quiantella.it#?#figure:has(img.wp-image-XXXXX)`
 - Add short comments when a rule targets a specific campaign, ad placement, or fallback behavior.
 - Preserve ABP/uBlock-compatible syntax unless intentionally using a uBO-specific procedural filter such as `:has`, `:has-text`, or `:-abp-contains`.
 - For the userscript, keep it dependency-free, limited to `https://www.quiantella.it/*`, and avoid collecting or sending any page data.

@@ -1,32 +1,45 @@
 ! Title: fuckdaicollifiorentini
 ! Description: Filter to block ads on Dai Colli Fiorentini's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.2.0
+! Version: 1.3.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
 ! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckdaicollifiorentini.txt
 
-!Block ads on articles
-daicollifiorentini.it##[src="https://backup.daicollifiorentini.it/wp-content/uploads/2023/11/TUTTAUTO-mobile.gif"]
+! Static image campaigns
+||daicollifiorentini.it/wp-content/uploads/2025/02/2000x500-SPORT_La-tua-vita-la-tua-acqua-SOCIAL.*$image
+||daicollifiorentini.it/wp-content/uploads/2025/02/2000x500_PNRR-Via-Bolognese-via-BOLOGNSE-0807-109-TRAC.png$image
+||daicollifiorentini.it/wp-content/uploads/2025/04/PERLA-ASSICURAZIONI.jpg$image
+||daicollifiorentini.it/wp-content/uploads/2025/04/liceria-Co.-2.png$image
+||daicollifiorentini.it/wp-content/uploads/2025/05/IMG_6934.jpg$image
+||daicollifiorentini.it/wp-content/uploads/2023/11/TUTTAUTO-mobile.gif$image
+||daicollifiorentini.it/wp-content/uploads/2023/11/Tuttauto-04-v2.gif$image
+||backup.daicollifiorentini.it/wp-content/uploads/2023/11/TUTTAUTO-mobile.gif$image
+||backup.daicollifiorentini.it/wp-content/uploads/2023/11/Tuttauto-04-v2.gif$image
 
-daicollifiorentini.it##[src="https://backup.daicollifiorentini.it/wp-content/uploads/2023/11/Tuttauto-04-v2.gif"]
-daicollifiorentini.it##p:nth-of-type(16)
-
-||daicollifiorentini.it/wp-content/uploads/2025/04/liceria-Co.-2.png
-||daicollifiorentini.it/wp-content/uploads/2025/02/2000x500-SPORT_La-tua-vita-la-tua-acqua-SOCIAL.png
-
+! Advanced Ads / injected banner wrappers
 daicollifiorentini.it##[id^="backu-"]
+daicollifiorentini.it##.banner_img
+daicollifiorentini.it##.banner_publi
 
-!Block ads on the homepage
-daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2025/04/PERLA-ASSICURAZIONI.jpg"]
-daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2025/02/2000x500_PNRR-Via-Bolognese-via-BOLOGNSE-0807-109-TRAC.png"]
-daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2025/05/IMG_6934.jpg"]
-daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2023/11/TUTTAUTO-mobile.gif"]
-daicollifiorentini.it##[src="https://daicollifiorentini.it/wp-content/uploads/2025/02/2000x500-SPORT_La-tua-vita-la-tua-acqua-SOCIAL.jpg"]
+! Header and top promo placeholders
 daicollifiorentini.it###header__nexal .elementor-widget-shortcode
+daicollifiorentini.it###banner-container-vuoibanner
+daicollifiorentini.it##.ads-top__container
+daicollifiorentini.it##.banner-top-container
+daicollifiorentini.it##.ads__cta
 
-!Block self-promotion
-daicollifiorentini.it##.elementor-widget-container > .ads__cta
+! Image fallback selectors for clients that miss network blocking
+daicollifiorentini.it##img[src*="/2000x500-SPORT_La-tua-vita-la-tua-acqua-SOCIAL."]
+daicollifiorentini.it##img[src*="/2000x500_PNRR-Via-Bolognese-via-BOLOGNSE-0807-109-TRAC.png"]
+daicollifiorentini.it##img[src*="/PERLA-ASSICURAZIONI.jpg"]
+daicollifiorentini.it##img[src*="/liceria-Co.-2.png"]
+daicollifiorentini.it##img[src*="/IMG_6934.jpg"]
+daicollifiorentini.it##img[src*="/TUTTAUTO-mobile.gif"]
+daicollifiorentini.it##img[src*="/Tuttauto-04-v2.gif"]
+
+! Legacy article placement fallback; fragile, but kept for old layouts.
+daicollifiorentini.it##p:nth-of-type(16)
 
 
