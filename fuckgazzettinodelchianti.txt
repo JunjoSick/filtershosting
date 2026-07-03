@@ -1,0 +1,91 @@
+! Title: fuckgazzettinodelchianti
+! Description: Filter to block ads on Il Gazzettino del Chianti's website, might break from time to time
+! Author: JunjoSick
+! Version: 1.0.0
+! Expires: 30 days
+! Homepage: https://github.com/JunjoSick/filtershosting
+! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
+! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckgazzettinodelchianti.txt
+
+! Google AdSense / Newspaper theme ad slots
+||pagead2.googlesyndication.com^$script,domain=gazzettinodelchianti.it
+gazzettinodelchianti.it##ins.adsbygoogle
+gazzettinodelchianti.it##[data-ad-client="ca-pub-9694044908603371"]
+gazzettinodelchianti.it##.td-g-rec
+gazzettinodelchianti.it##.td-a-rec
+gazzettinodelchianti.it##a.td_spot_img_all
+
+! Header, background, and inline sponsor banners
+||gazzettinodelchianti.it/wp-content/uploads/2026/03/Banner-Chianti-Classico-Gazzettino-del-Chianti-marzo-26_1.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/Banner-Consorzio-Chianti-Classico-PSR-21-Vino2*.png$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/banner-villa-san-martino*.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2024/06/Banner-coop-gazzettino-standard*.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/06/Vignamaggio-banner*yoga-luglio.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/10/1160x80_Publiacqua_Acqua-alert-social.png$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/10/728x140_Publiacqua_Acqua-alert-social.png$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/03/Banner-Studio-Viaggi-PC_GIF.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/03/Banner-Studio-Viaggi-Mobile_GIF.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2024/11/Banner-Parti-Nov-24_GIF.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2022/04/Banner-ChiantiBanca-aprile-2022_CB_banner_Gazzettino_728x140_01.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/03/Banner-CAF-Cgil.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/BannerCoopMercataleGazzettinoNuovo.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/12/Banner-BB2025.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/BannerArciSanCascianoGazzettinoNuovo.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/01/Banner-Banco-Fiorentino-2025_1.jpg$image
+gazzettinodelchianti.it##img[src*="/Banner-Chianti-Classico-Gazzettino-del-Chianti-marzo-26_1"]
+gazzettinodelchianti.it##img[src*="/Banner-Consorzio-Chianti-Classico-PSR-21-Vino2"]
+gazzettinodelchianti.it##img[src*="/banner-villa-san-martino"]
+gazzettinodelchianti.it##img[src*="/Banner-coop-gazzettino-standard"]
+gazzettinodelchianti.it##img[src*="/Vignamaggio-banner"][src*="yoga-luglio"]
+gazzettinodelchianti.it##img[src*="/1160x80_Publiacqua_Acqua-alert-social"]
+gazzettinodelchianti.it##img[src*="/728x140_Publiacqua_Acqua-alert-social"]
+gazzettinodelchianti.it##img[src*="/Banner-Studio-Viaggi-PC_GIF"]
+gazzettinodelchianti.it##img[src*="/Banner-Studio-Viaggi-Mobile_GIF"]
+gazzettinodelchianti.it##img[src*="/Banner-Parti-Nov-24_GIF"]
+gazzettinodelchianti.it##img[src*="/Banner-ChiantiBanca-aprile-2022_CB_banner_Gazzettino_728x140_01"]
+gazzettinodelchianti.it##img[src*="/Banner-CAF-Cgil"]
+gazzettinodelchianti.it##img[src*="/BannerCoopMercataleGazzettinoNuovo"]
+gazzettinodelchianti.it##img[src*="/Banner-BB2025"]
+gazzettinodelchianti.it##img[src*="/BannerArciSanCascianoGazzettinoNuovo"]
+gazzettinodelchianti.it##img[src*="/Banner-Banco-Fiorentino-2025_1"]
+! Collapse sidebar text widgets that carry exact banner creatives.
+gazzettinodelchianti.it#?#.widget_text:has(img[src*="/Banner-"])
+gazzettinodelchianti.it#?#.widget_text:has(img[src*="/BannerCoop"])
+gazzettinodelchianti.it#?#.widget_text:has(img[src*="/BannerArci"])
+gazzettinodelchianti.it##.widget_text:has(img[src*="/Banner-"])
+gazzettinodelchianti.it##.widget_text:has(img[src*="/BannerCoop"])
+gazzettinodelchianti.it##.widget_text:has(img[src*="/BannerArci"])
+
+! Popup Maker auto-open ad overlays
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/POP-UP-PLUS_UnipolSai-Polizza-Vita*.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/POP-UP-Studio-Landi-Luglio*.png$image
+gazzettinodelchianti.it###pum-142892
+gazzettinodelchianti.it###pum-142885
+gazzettinodelchianti.it##img[src*="/POP-UP-PLUS_UnipolSai-Polizza-Vita"]
+gazzettinodelchianti.it##img[src*="/POP-UP-Studio-Landi-Luglio"]
+! Collapse future popup campaigns that keep the same POP-UP media naming.
+gazzettinodelchianti.it#?#.pum-overlay:has(img[src*="/POP-UP-"])
+gazzettinodelchianti.it##.pum-overlay:has(img[src*="/POP-UP-"])
+
+! Sponsor logo carousels
+||gazzettinodelchianti.it/wp-content/uploads/2021/01/Banner-nuovo-CRC-Antella.png$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/07/RistoroAnticaScuderia.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/07/LaCapannadelGallo.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2021/01/Tuttauto-OK.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2022/03/Cavaliere-di-Gabbiano_OK.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2020/07/Oceanya.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2022/10/Sichef.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2023/04/Logo-Spi-Cgi.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/03/Logo-Trattoria-La-Vecchia-Capannina.png$image
+||gazzettinodelchianti.it/wp-content/uploads/2025/04/Logo-Stuzzivino*.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/02/VittorioOK.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/02/Villa-San-MIchele.jpg$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/04/Logo-Teatro-Ponte-a-Ema.jpg$image
+gazzettinodelchianti.it###wpls-logo-showcase-slider-1
+gazzettinodelchianti.it###wpls-logo-showcase-slider-2
+gazzettinodelchianti.it#?#.wpls-logo-showcase-slider-wrp:has(#wpls-logo-showcase-slider-1)
+gazzettinodelchianti.it#?#.wpls-logo-showcase-slider-wrp:has(#wpls-logo-showcase-slider-2)
+gazzettinodelchianti.it##.wpls-logo-showcase-slider-wrp:has(#wpls-logo-showcase-slider-1)
+gazzettinodelchianti.it##.wpls-logo-showcase-slider-wrp:has(#wpls-logo-showcase-slider-2)
+gazzettinodelchianti.it#?#.tdm_block_column_title:contains(SOSTENGONO IL GAZZETTINO)
+gazzettinodelchianti.it##.tdm_block_column_title:has-text(SOSTENGONO IL GAZZETTINO)

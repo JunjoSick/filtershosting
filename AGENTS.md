@@ -7,6 +7,7 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
 ## Repo Layout
 
 - `fuckquiantella.txt`: ABP/uBlock Origin filter list for `quiantella.it`.
+- `fuckgazzettinodelchianti.txt`: ABP/uBlock Origin and AdGuard filter list for `gazzettinodelchianti.it`.
 - `fuckdaicollifiorentini.txt`: ABP/uBlock Origin filter list for `daicollifiorentini.it`.
 - `kebablastazione.txt`: YouTube cleanup filter list, exposed in the README as `youtubesuckssobad`.
 - `quiantella-adblocker.user.js`: Tampermonkey/Greasemonkey userscript for dynamic inline QuiAntella real-estate ads.
@@ -24,6 +25,7 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
   - `||www.quiantella.it/wp-content/uploads/YYYY/MM/ad-file*.ext$image`
   - `quiantella.it##img[data-src*="/ad-file"]`
   - `quiantella.it#?#figure:has(img.wp-image-XXXXX)`
+- For Gazzettino del Chianti Newspaper-theme ads, prefer exact first-party banner image rules, plain CSS for `.td-a-rec`, `.td-g-rec`, `ins.adsbygoogle`, and AdGuard ExtendedCss only when collapsing Popup Maker or sponsor-carousel parents.
 - Add short comments when a rule targets a specific campaign, ad placement, or fallback behavior.
 - Preserve ABP/uBlock-compatible syntax unless intentionally using a uBO-specific procedural filter such as `:has`, `:has-text`, or `:-abp-contains`.
 - For the userscript, keep it dependency-free, limited to `https://www.quiantella.it/*`, and avoid collecting or sending any page data.
