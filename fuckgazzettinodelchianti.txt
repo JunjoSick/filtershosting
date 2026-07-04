@@ -1,7 +1,7 @@
 ! Title: fuckgazzettinodelchianti
 ! Description: Filter to block ads on Il Gazzettino del Chianti's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.0.0
+! Version: 1.0.1
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -57,12 +57,19 @@ gazzettinodelchianti.it##.widget_text:has(img[src*="/BannerCoop"])
 gazzettinodelchianti.it##.widget_text:has(img[src*="/BannerArci"])
 
 ! Popup Maker auto-open ad overlays
+||gazzettinodelchianti.it/wp-content/uploads/pum/pum-site-scripts.js$script
 ||gazzettinodelchianti.it/wp-content/uploads/2020/04/POP-UP-PLUS_UnipolSai-Polizza-Vita*.jpg$image
 ||gazzettinodelchianti.it/wp-content/uploads/2020/04/POP-UP-Studio-Landi-Luglio*.png$image
+gazzettinodelchianti.it##.pum-overlay
+gazzettinodelchianti.it##.popmake-overlay
+gazzettinodelchianti.it##.pum-container.popmake
 gazzettinodelchianti.it###pum-142892
 gazzettinodelchianti.it###pum-142885
 gazzettinodelchianti.it##img[src*="/POP-UP-PLUS_UnipolSai-Polizza-Vita"]
 gazzettinodelchianti.it##img[src*="/POP-UP-Studio-Landi-Luglio"]
+! Android fallback: Popup Maker can leave a transparent overlay or html scroll lock after visible content is hidden.
+gazzettinodelchianti.it#$#.pum-overlay, .pum-overlay.pum-active, .popmake-overlay, .pum-container.popmake, .pum-container.popmake.active { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+gazzettinodelchianti.it#$#html.pum-open, html.pum-open.pum-open-overlay, html[class*="pum-open"], body[class*="pum-open"] { overflow: auto !important; position: static !important; height: auto !important; padding-right: 0 !important; touch-action: auto !important; }
 ! Collapse future popup campaigns that keep the same POP-UP media naming.
 gazzettinodelchianti.it#?#.pum-overlay:has(img[src*="/POP-UP-"])
 gazzettinodelchianti.it##.pum-overlay:has(img[src*="/POP-UP-"])
