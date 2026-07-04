@@ -1,7 +1,7 @@
 ! Title: fuckgazzettinodelchianti
 ! Description: Filter to block ads on Il Gazzettino del Chianti's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.0.1
+! Version: 1.0.2
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -48,6 +48,9 @@ gazzettinodelchianti.it##img[src*="/BannerCoopMercataleGazzettinoNuovo"]
 gazzettinodelchianti.it##img[src*="/Banner-BB2025"]
 gazzettinodelchianti.it##img[src*="/BannerArciSanCascianoGazzettinoNuovo"]
 gazzettinodelchianti.it##img[src*="/Banner-Banco-Fiorentino-2025_1"]
+! Newspaper background takeover can leave a page-wide Android long-press/callout target.
+gazzettinodelchianti.it#$#body.td-background-link { background-image: none !important; cursor: auto !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; user-select: text !important; }
+gazzettinodelchianti.it#$#body.td-background-link .td-container-wrap, body.td-background-link .td-header-container, body.td-background-link .td-post-header, body.td-background-link .td-container { cursor: auto !important; -webkit-touch-callout: default !important; }
 ! Collapse sidebar text widgets that carry exact banner creatives.
 gazzettinodelchianti.it#?#.widget_text:has(img[src*="/Banner-"])
 gazzettinodelchianti.it#?#.widget_text:has(img[src*="/BannerCoop"])
@@ -55,6 +58,14 @@ gazzettinodelchianti.it#?#.widget_text:has(img[src*="/BannerArci"])
 gazzettinodelchianti.it##.widget_text:has(img[src*="/Banner-"])
 gazzettinodelchianti.it##.widget_text:has(img[src*="/BannerCoop"])
 gazzettinodelchianti.it##.widget_text:has(img[src*="/BannerArci"])
+
+! Donation/self-promotion panel
+||gazzettinodelchianti.it/wp-content/uploads/2020/06/button_sostienici.png$image
+gazzettinodelchianti.it##form[action*="paypal.com/cgi-bin/webscr"]
+gazzettinodelchianti.it#?#.vc_column_inner:contains(Sostieni il Gazzettino del Chianti)
+gazzettinodelchianti.it##.vc_column_inner:has-text(Sostieni il Gazzettino del Chianti)
+gazzettinodelchianti.it#?#.vc_raw_html:has(form[action*="paypal.com/cgi-bin/webscr"])
+gazzettinodelchianti.it##.vc_raw_html:has(form[action*="paypal.com/cgi-bin/webscr"])
 
 ! Popup Maker auto-open ad overlays
 ||gazzettinodelchianti.it/wp-content/uploads/pum/pum-site-scripts.js$script
