@@ -1,7 +1,7 @@
 ! Title: fuckdaicollifiorentini
 ! Description: Filter to block ads on Dai Colli Fiorentini's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.3.0
+! Version: 1.4.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -41,5 +41,20 @@ daicollifiorentini.it##img[src*="/Tuttauto-04-v2.gif"]
 
 ! Legacy article placement fallback; fragile, but kept for old layouts.
 daicollifiorentini.it##p:nth-of-type(16)
+
+! Acconsento.click GDPR consent banner (injected at runtime by acconsento.click/script.js)
+! Root container of the whole consent widget; hides backdrop and dialog on desktop and mobile
+daicollifiorentini.it###acconsento-click
+! Fallbacks in case the root id changes: overlay backdrop and banner dialog, all position variants
+daicollifiorentini.it##div[class*="el-acconsento-overlay"]
+daicollifiorentini.it##div[class*="acconsento-click-overlay"]
+daicollifiorentini.it##div[class*="acconsento-click-consent-banner"]
+daicollifiorentini.it##div[class*="el-acconsento-dialog"]
+! Banner locks page scroll; restore it once the widget is hidden (uBO syntax)
+daicollifiorentini.it##html:style(overflow: auto !important;)
+daicollifiorentini.it##body:style(overflow: auto !important;)
+! Same scroll unlock for AdGuard, which ignores uBO :style()
+daicollifiorentini.it#$#html { overflow: auto !important; }
+daicollifiorentini.it#$#body { overflow: auto !important; }
 
 
