@@ -1,7 +1,7 @@
 ! Title: fuckfirenzedintorni
 ! Description: Filter to block ads on Firenze e Dintorni's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.0.1
+! Version: 1.1.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -17,6 +17,12 @@ firenzedintorni.it##.bkg-griginoo
 ! Cookiekit consent notice (custom WDE banner, moved before the footer by JS)
 firenzedintorni.it###wdc_banner
 firenzedintorni.it##.cookiebanner
+
+! Articles indent some paragraphs with leading &nbsp; runs, breaking left alignment.
+! Strip runs of 2+ non-breaking spaces at the start of article body spans.
+! Trusted scriptlet: mark this list as trusted in uBO (Trusted checkbox) for it to apply.
+firenzedintorni.it##+js(trusted-replace-node-text, .post-content .mb-4 span, .+, , ^\u00A0{2,}, )
+firenzedintorni.it#%#//scriptlet('trusted-replace-node-text', '.post-content .mb-4 span', '.+', '', '^\\u00A0{2,}', '')
 
 ! Dashed "functionality disabled until cookies" placeholders replacing share buttons
 firenzedintorni.it#?#div:has(> .cookiekit_accetto_btn)
