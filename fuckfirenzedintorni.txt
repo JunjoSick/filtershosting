@@ -1,7 +1,7 @@
 ! Title: fuckfirenzedintorni
 ! Description: Filter to block ads on Firenze e Dintorni's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.0.0
+! Version: 1.0.1
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -10,9 +10,9 @@
 ! Sponsor logo carousel creatives (sidebar on home, mid-article placements)
 ||firenzedintorni.it/uploadedfiles/sponsor/$image
 firenzedintorni.it##.itm_sponsor_carousel
-! Collapse the whole sponsor box only when it actually contains sponsor items
-firenzedintorni.it#?#.bkg-griginoo:has(.itm_sponsor_carousel)
-firenzedintorni.it##.bkg-griginoo:has(.itm_sponsor_carousel)
+! The grey box is a dedicated sponsor wrapper on every audited page; plain CSS so
+! clients without ExtendedCss/procedural support still remove it fully, margins included
+firenzedintorni.it##.bkg-griginoo
 
 ! Cookiekit consent notice (custom WDE banner, moved before the footer by JS)
 firenzedintorni.it###wdc_banner
