@@ -9,6 +9,7 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
 - `fuckquiantella.txt`: ABP/uBlock Origin filter list for `quiantella.it`.
 - `fuckgazzettinodelchianti.txt`: ABP/uBlock Origin and AdGuard filter list for `gazzettinodelchianti.it`.
 - `fuckdaicollifiorentini.txt`: ABP/uBlock Origin filter list for `daicollifiorentini.it`.
+- `fuckfirenzedintorni.txt`: ABP/uBlock Origin filter list for `firenzedintorni.it`.
 - `kebablastazione.txt`: YouTube cleanup filter list, exposed in the README as `youtubesuckssobad`.
 - `quiantella-adblocker.user.js`: Tampermonkey/Greasemonkey userscript for dynamic inline QuiAntella real-estate ads.
 - `README.md`: public subscription/install links.
@@ -26,6 +27,13 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
   - `quiantella.it##img[data-src*="/ad-file"]`
   - `quiantella.it#?#figure:has(img.wp-image-XXXXX)`
 - For Gazzettino del Chianti Newspaper-theme ads, prefer exact first-party banner image rules, plain CSS for `.td-a-rec`, `.td-g-rec`, `ins.adsbygoogle`, and AdGuard ExtendedCss only when collapsing Popup Maker or sponsor-carousel parents.
+- For Dai Colli Fiorentini's Acconsento.click consent banner (injected at runtime by `acconsento.click/script.js`, obfuscated), the confirmed pattern is:
+  - Hide the widget root `###acconsento-click` (stable ID the script itself queries); it wraps backdrop and dialog for all viewport variants.
+  - Fallback on substring classes: `[class*="el-acconsento-overlay"]`, `[class*="acconsento-click-overlay"]`, `[class*="acconsento-click-consent-banner"]` — never hardcode positional or Tailwind arbitrary-value classes like `-tl` or `max-w-\[1800px\]`; they differ on mobile.
+  - Restore scrolling with both uBO (`##html:style(...)`) and AdGuard (`#$#html { ... }`) body/html overflow rules, since hiding without consenting leaves the scroll lock.
+- Firenzedintorni runs a custom CMS (Firenze Web Division / WDE), not WordPress: no Google ads. Ads are sponsor carousels served from `/uploadedfiles/sponsor/`; block that directory network-wide and collapse `.itm_sponsor_carousel` plus `.bkg-griginoo:has(.itm_sponsor_carousel)`. Its homegrown cookiekit banner is `#wdc_banner` (also classed `.cookiebanner`). Beware: its HTML uses single-quoted attributes, so double-quote-only greps miss markup.
+- To find fixes other users rely on, shallow-clone `AdguardTeam/AdguardFilters` and grep it for our domains; port missing rules to our lists in cross-client syntax (uBO `##+js(...)` plus AdGuard-native `#%#//scriptlet(...)` where needed). GitHub code-search API needs auth; local grep does not.
+- YouTube layout changes constantly: keep `kebablastazione.txt` `! Expires` short (7 days), and verify selectors against live pages by fetching with a SOCS cookie and grepping `ytInitialData` for renderer names before trusting old attribute-based Shorts rules.
 - Add short comments when a rule targets a specific campaign, ad placement, or fallback behavior.
 - Preserve ABP/uBlock-compatible syntax unless intentionally using a uBO-specific procedural filter such as `:has`, `:has-text`, or `:-abp-contains`.
 - For the userscript, keep it dependency-free, limited to `https://www.quiantella.it/*`, and avoid collecting or sending any page data.
