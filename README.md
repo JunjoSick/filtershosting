@@ -25,6 +25,13 @@ For `daicollifiorentini.it`.
 - Subscribe: [fuckdaicollifiorentini](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckdaicollifiorentini.txt?_=raw&title=fuckdaicollifiorentini)
 - Raw: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckdaicollifiorentini.txt`
 
+### fuckfirenzedintorni
+
+For `firenzedintorni.it`.
+
+- Subscribe: [fuckfirenzedintorni](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckfirenzedintorni.txt?_=raw&title=fuckfirenzedintorni)
+- Raw: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckfirenzedintorni.txt`
+
 ### youtubecazzimm
 
 YouTube cleanup list, exposed as `youtubesuckssobad`.
@@ -50,5 +57,6 @@ Useful raw URLs:
 - QuiAntella: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckquiantella.txt`
 - Gazzettino del Chianti: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckgazzettinodelchianti.txt`
 - Dai Colli Fiorentini: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckdaicollifiorentini.txt`
+- Firenze e Dintorni: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckfirenzedintorni.txt`
 
 For HTTPS sites, enable HTTPS filtering for the browser you use. After a list update, force-update the custom filter in AdGuard and reload the affected browser tab.
