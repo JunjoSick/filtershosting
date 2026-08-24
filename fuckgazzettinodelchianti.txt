@@ -1,7 +1,7 @@
 ! Title: fuckgazzettinodelchianti
 ! Description: Filter to block ads on Il Gazzettino del Chianti's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.0.2
+! Version: 1.1.0
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -84,6 +84,14 @@ gazzettinodelchianti.it#$#html.pum-open, html.pum-open.pum-open-overlay, html[cl
 ! Collapse future popup campaigns that keep the same POP-UP media naming.
 gazzettinodelchianti.it#?#.pum-overlay:has(img[src*="/POP-UP-"])
 gazzettinodelchianti.it##.pum-overlay:has(img[src*="/POP-UP-"])
+! Popunder defense (ported from AdGuard filters): popups also fire window.open ads
+! uBO / AdGuard-compatible scriptlet
+gazzettinodelchianti.it##+js(window.open-defuser)
+! AdGuard-native scriptlet for clients that ignore uBO syntax
+gazzettinodelchianti.it#%#//scriptlet('prevent-window-open')
+! Neutralize leftover top margin of the removed header ad placeholder
+gazzettinodelchianti.it#$#.tdi_31 { margin-top: 0 !important; }
+gazzettinodelchianti.it##.tdi_31:style(margin-top: 0 !important;)
 
 ! Sponsor logo carousels
 ||gazzettinodelchianti.it/wp-content/uploads/2021/01/Banner-nuovo-CRC-Antella.png$image
