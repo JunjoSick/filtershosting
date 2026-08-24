@@ -1,8 +1,8 @@
 ! Title: youtubesuckssobad
 ! Description: m'importa 'na sega
 ! Author: JunjoSick
-! Version: 2.0
-! Expires: 365 days
+! Version: 2.1
+! Expires: 7 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
 ! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/kebablastazione.txt
@@ -37,6 +37,8 @@ youtube.com##[is-shorts]
 www.youtube.com###guide [title="Shorts"], .ytd-mini-guide-entry-renderer[title="Shorts"]
 ! YT Search - Hide Shorts
 www.youtube.com##ytd-search ytd-video-renderer:has([overlay-style="SHORTS"])
+! YT Search - Hide Shorts (new lockup view-model layout)
+www.youtube.com##ytd-search yt-lockup-view-model:has(a[href*="/shorts/"])
 ! YT Search, Channels and Sidebar or below the player - Hide the Shorts sections
 www.youtube.com##ytd-reel-shelf-renderer
 ! YT Channels - Hide the Shorts tab
@@ -49,6 +51,9 @@ www.youtube.com##ytd-browse[page-subtype="subscriptions"] ytd-video-renderer:has
 www.youtube.com##ytd-browse[page-subtype="subscriptions"] ytd-rich-item-renderer:has([overlay-style="SHORTS"])
 ! YT Sidebar - Hide Shorts
 www.youtube.com###related ytd-compact-video-renderer:has([overlay-style="SHORTS"])
+! YT Generic - Hide Shorts by link target, covers layout experiments on home, subs and sidebar
+youtube.com##ytd-rich-item-renderer:has(a[href*="/shorts/"])
+youtube.com##ytd-compact-video-renderer:has(a[href*="/shorts/"])
 
 ! YT Mobile - Hide the Shorts Menu button
 m.youtube.com##ytm-pivot-bar-item-renderer:has(>.pivot-shorts)
