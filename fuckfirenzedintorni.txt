@@ -1,7 +1,7 @@
 ! Title: fuckfirenzedintorni
 ! Description: Filter to block ads on Firenze e Dintorni's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.1.1
+! Version: 1.1.2
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -25,7 +25,9 @@ firenzedintorni.it##.cookiebanner
 ! uBO signature: selector, textPattern, flags, replaceThis, withThis
 firenzedintorni.it##+js(trusted-replace-node-text, .post-content .mb-4 span, .+, , ^\u00A0{2,}, )
 ! AdGuard signature: nodeName, textMatch, pattern, replacement (regexes in /.../ form)
-firenzedintorni.it#%#//scriptlet('trusted-replace-node-text', 'span', '/./', '/^\u00A0{2,}/', '')
+! textMatch must equal the strip pattern: AdGuard rewrites node.textContent even when
+! unchanged, which would delete <br> children of every span if textMatch matched them all.
+firenzedintorni.it#%#//scriptlet('trusted-replace-node-text', 'span', '/^\u00A0{2,}/', '/^\u00A0{2,}/', '')
 
 ! Dashed "functionality disabled until cookies" placeholders replacing share buttons
 firenzedintorni.it#?#div:has(> .cookiekit_accetto_btn)
