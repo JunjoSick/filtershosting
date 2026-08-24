@@ -1,7 +1,7 @@
 ! Title: youtubesuckssobad
 ! Description: m'importa 'na sega
 ! Author: JunjoSick
-! Version: 2.1
+! Version: 2.2
 ! Expires: 7 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -73,3 +73,32 @@ youtube.com##ytd-radio-renderer
 
 ! Removes "YouTube" (Music) playlists from the right side panel
 youtube.com##ytd-compact-playlist-renderer:has([title^="YouTube"])
+
+! AdGuard ExtendedCss duplicates of the procedural rules above.
+! Recent AdGuard auto-upgrades these selectors, but explicit #?# rules guarantee
+! coverage on older AdGuard for Android builds. uBO ignores #?# lines.
+youtube.com#?#ytd-shelf-renderer.style-scope:has(span:has-text(/From related searches/i))
+youtube.com#?#ytd-shelf-renderer.style-scope:has(span:has-text(/Recently uploaded/i))
+youtube.com#?#ytd-shelf-renderer.style-scope:has(span:has-text(/Previously watched/i))
+youtube.com#?#ytd-horizontal-card-list-renderer.ytd-item-section-renderer.style-scope
+youtube.com#?#ytd-shelf-renderer.style-scope:has(span:has-text(/Learn while you're at home/i))
+youtube.com#?#ytd-horizontal-card-list-renderer.ytd-item-section-renderer.style-scope:has(span:has-text(/Searches related to/i))
+youtube.com#?#ytd-shelf-renderer.style-scope:has(span:has-text(/Watch again/i))
+youtube.com#?##contents > ytd-shelf-renderer:has-text(/For you/)
+youtube.com#?#ytd-shelf-renderer:has-text(/People also watched/)
+youtube.com#?#ytd-shelf-renderer.style-scope:has(span:has-text(/Related to your search/i))
+www.youtube.com#?#ytd-search ytd-video-renderer:has([overlay-style="SHORTS"])
+www.youtube.com#?#ytd-search yt-lockup-view-model:has(a[href*="/shorts/"])
+www.youtube.com#?##guide [title="Shorts"], .ytd-mini-guide-entry-renderer[title="Shorts"]
+www.youtube.com#?#[tab-title="Shorts"]
+www.youtube.com#?#ytd-browse[page-subtype="subscriptions"] ytd-grid-video-renderer:has([overlay-style="SHORTS"])
+www.youtube.com#?#ytd-browse[page-subtype="subscriptions"] ytd-video-renderer:has([overlay-style="SHORTS"])
+www.youtube.com#?#ytd-browse[page-subtype="subscriptions"] ytd-rich-item-renderer:has([overlay-style="SHORTS"])
+www.youtube.com#?##related ytd-compact-video-renderer:has([overlay-style="SHORTS"])
+youtube.com#?#ytd-rich-item-renderer:has(a[href*="/shorts/"])
+youtube.com#?#ytd-compact-video-renderer:has(a[href*="/shorts/"])
+m.youtube.com#?#ytm-pivot-bar-item-renderer:has(>.pivot-shorts)
+m.youtube.com#?#ytm-search ytm-video-with-context-renderer:has([data-style="SHORTS"])
+m.youtube.com#?#[tab-title="Shorts"]
+youtube.com#?#ytd-rich-item-renderer:has(#video-title-link[title*="Mix"][href$="start_radio=1"])
+youtube.com#?#ytd-compact-playlist-renderer:has([title^="YouTube"])
