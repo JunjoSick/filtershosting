@@ -1,0 +1,68 @@
+name: Publish filter bundle (opt-in)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Every main push is considered so a concurrent unrelated commit also queues a
+# fresh attempt. A no-op makes no commit. GITHUB_TOKEN pushes do not retrigger it.
+concurrency:
+  group: publish-fuckquotidianilocali
+  cancel-in-progress: false
+
+jobs:
+  configuration:
+    if: github.ref == 'refs/heads/main' && github.repository == 'JunjoSick/filtershosting'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      enabled: ${{ steps.config.outputs.enabled }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - id: config
+        run: |
+          enabled=$(node -e 'const c = require("./bundle-automation.json"); if (typeof c.enabled !== "boolean") process.exit(1); console.log(c.enabled);')
+          echo "enabled=$enabled" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: configuration
+    if: needs.configuration.outputs.enabled == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Temporary permission for this job only, never a PAT or repository setting.
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # Build the latest main when this serialized job starts, not an old event.
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - run: npm run check
+      - id: commit
+        name: Validate history and commit generated files only
+        run: |
+          changed=$(node tools/automation.mjs commit)
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+      - name: Publish with a normal fast-forward-only push
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin HEAD:refs/heads/main

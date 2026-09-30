@@ -8,6 +8,12 @@ of truth and keep their existing subscription URLs.
 
 ## Make an update
 
+The draft includes automatic generation and an **inactive automatic publisher**.
+`bundle-automation.json` contains `"enabled": false`; no job with write
+permissions runs while that flag is false. CI generates a candidate on every
+PR, but in this disabled mode it requires the generated outputs to be committed
+before merging. The manual procedure below remains available as a fallback.
+
 Use Node.js 24 (22 or newer is supported) and the Unix `diff` utility:
 
 ```sh
@@ -20,11 +26,53 @@ node tools/bundle.mjs history-check origin/main
 git -c core.whitespace=cr-at-eol diff --check
 ```
 
-Commit the source change, `fuckquotidianilocali.txt`, `diffs/`, and `history/`
-together. Review and merge that commit normally. No workflow writes to a branch,
-deploys, needs a PAT, or changes repository settings. CI only verifies committed
-outputs and rejects a stale bundle or rewritten published history. A draft PR
-does not activate the `/main/` subscription.
+With automation disabled, commit the source change, `fuckquotidianilocali.txt`,
+`diffs/`, and `history/` together. Review and merge that commit normally.
+No workflow currently writes to a branch or changes repository settings.
+A draft PR does not activate the `/main/` subscription.
+
+## Proposed automatic publishing (disabled)
+
+After explicit approval to activate publishing, change the single tracked flag
+in `bundle-automation.json` to `true` in a reviewed commit on `main`. No PAT,
+GitHub App, secret, repository variable, branch-rule exemption, or repository
+permission setting is required or configured by this proposal.
+
+With the flag enabled:
+
+1. A source-only PR triggers read-only CI: generate the candidate bundle, run
+   tests, verify checksums/history, and reject changes outside generated paths.
+   Committing generated files manually is no longer required.
+2. Every push to `main` queues the publisher. Its write job runs only when the
+   flag read from `main` is true. It checks out the latest `main`, regenerates,
+   tests and validates, then commits the bundle, snapshots, manifest and patch
+   edges together. Source-only changes become visible in the individual lists
+   before this job updates the bundle; all bundle artifacts share one commit.
+3. No content change means no commit and no push. The publisher is serialized
+   with `cancel-in-progress: false`. If another main commit arrives while it is
+   running, the ordinary Git push rejects the stale update instead of forcing
+   over it; the queued run starts from the newer main. Manual rerun is available
+   through `workflow_dispatch` after an infrastructure failure.
+
+Only the gated publishing job requests `contents: write` on GitHub's temporary
+`GITHUB_TOKEN`. Checkout does not persist credentials. The push step passes the
+token through `GH_TOKEN` to GitHub CLI's Git credential helper for that one
+command. It does not create persistent credentials or edit authentication
+settings. GitHub documents that pushes using this job token do not start another
+push workflow; the publishing job performs validation itself before pushing:
+[GITHUB_TOKEN documentation](https://docs.github.com/en/actions/concepts/security/github_token).
+
+Existing repository or organization policies may deny the token write access,
+and branch protection may reject direct bot pushes. In that case the job fails
+without changing those policies or creating stronger credentials. The choices
+would be retaining manual publication or separately approving a different
+publication route. No real publishing-token push has been tested while this
+proposal is disabled; concurrency rejection is tested against a local bare Git
+remote. Do not enable the flag simply to test permissions without approval.
+
+To pause an activated publisher, set the same flag back to `false`. A run that
+already checked out older main will fail its fast-forward push against that
+newer disabling commit. Future write jobs are skipped.
 
 The local build uses an exclusive `.bundle-build.lock` directory. A competing
 build fails; source or artifact changes during generation also fail before any
@@ -121,5 +169,9 @@ Differential support is not a fix for Android's manual-update status display.
 AdGuard confirmed in [issue #6153](https://github.com/AdguardTeam/AdguardForAndroid/issues/6153#issuecomment-5294003933)
 that manual checks force custom-list downloads, whereas automatic updates can
 use patches. The misleading “updated” classification was subsequently marked
-[fixed for v4.15](https://github.com/AdguardTeam/AdguardForAndroid/issues/6153#issuecomment-5676615721).
-Do not infer changed filter content from that message or an advanced timestamp.
+[completed for v4.15](https://github.com/AdguardTeam/AdguardForAndroid/issues/6153#issuecomment-5676615721).
+On 2026-09-30, the official release history still lists stable 4.14.2; 4.15
+Nightly 1 is listed for 2026-09-21. The issue closure does not establish which
+published nightly build includes the fix, and there is no stable 4.15 release
+listed yet. Do not infer changed filter content from that message or an
+advanced timestamp.
