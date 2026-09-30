@@ -10,6 +10,7 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
 - `fuckgazzettinodelchianti.txt`: ABP/uBlock Origin and AdGuard filter list for `gazzettinodelchianti.it`.
 - `fuckdaicollifiorentini.txt`: ABP/uBlock Origin filter list for `daicollifiorentini.it`.
 - `fuckfirenzedintorni.txt`: ABP/uBlock Origin filter list for `firenzedintorni.it`.
+- `fuckquotidianilocali.txt`: generated bundle of the four lists above; edit the individual sources, then run `npm run build`. Commit the bundle, `history/`, and `diffs/` together. See `docs/bundle-maintenance.md`.
 - `kebablastazione.txt`: YouTube cleanup filter list, exposed in the README as `youtubesuckssobad`.
 - `quiantella-adblocker.user.js`: Tampermonkey/Greasemonkey userscript for dynamic inline QuiAntella real-estate ads.
 - `README.md`: public subscription/install links.
@@ -38,7 +39,7 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
 - AdGuard's `trusted-replace-node-text` rewrites `node.textContent` even when the replacement changes nothing, and setting `textContent` deletes all child elements (`<br>`, links, etc.). Always scope its `textMatch` to exactly the nodes that must change (e.g. match the leading-nbsp pattern itself, not `/./`), or it flattens unrelated siblings. uBO's variant edits text nodes only and is immune.
 - Keep every list dual-client: for each uBO procedural rule (`:has`, `:has-text`, `:-abp-contains`), either rely on a documented AdGuard equivalent already present (`#?#:contains` etc.) or add an explicit `#?#` duplicate. uBO ignores `#?#` lines; older AdGuard for Android builds skip uBO-only procedural selectors in plain `##` rules.
 - Audit dual coverage by grepping each list for `:has-text|:-abp-contains|##+js|:style(` and confirming an AdGuard counterpart (`#?#`, `#%#//scriptlet`, `#$#`) exists; remember comments can false-positive the grep.
-- Possible future project: GitHub Action to generate AdGuard differential-update patches so AdGuard stops reporting "updated" on unchanged custom filters. Patch format is documented in `AdguardTeam/FiltersRegistry`; `AdguardTeam/FiltersDownloader` only consumes diffs (client-side), generation tooling is not public. Would require `! Diff-Path:` headers, a versioned `diffs/` folder, and CI state tracking; AdGuard falls back to full download on patch failure, so mistakes degrade gracefully.
+- Bundle updates use the public official `@adguard/diff-builder` package. Keep generated metadata byte-stable when content is unchanged, preserve all published snapshots and completed patches, and run `npm test`, `npm run check`, and `node tools/bundle.mjs history-check origin/main`. The CI workflow only verifies; it does not publish. AdGuard Android's manual update may force full downloads and report unchanged lists as updated (upstream issue #6153); differential support does not guarantee a fix for that UI behavior or an immediate full-download fallback after patch failure.
 - YouTube layout changes constantly: keep `kebablastazione.txt` `! Expires` short (7 days), and verify selectors against live pages by fetching with a SOCS cookie and grepping `ytInitialData` for renderer names before trusting old attribute-based Shorts rules.
 - Add short comments when a rule targets a specific campaign, ad placement, or fallback behavior.
 - Preserve ABP/uBlock-compatible syntax unless intentionally using a uBO-specific procedural filter such as `:has`, `:has-text`, or `:-abp-contains`.
@@ -47,7 +48,7 @@ This repo hosts JunjoSick's personal ad-block filter lists and one userscript. K
 ## Checks
 
 - Run `git status --short --branch` before and after edits.
-- Run `git -c core.whitespace=cr-at-eol diff --check` before finishing; the `.txt` filter lists currently use CRLF line endings.
+- Run `git -c core.whitespace=cr-at-eol diff --check` before finishing. Preserve source line endings; the generated bundle, snapshots, and patches use LF for exact differential reconstruction.
 - Run `rg -n "master|raw.githubusercontent.com/JunjoSick/filtershosting" README.md *.txt *.user.js` after URL-related edits to catch stale branch links.
 - For filter changes, manually inspect the target page when possible and confirm the rule does not hide surrounding article content.
 - For userscript changes, manually test an affected QuiAntella article with the userscript manager console open and check that only intended ad elements are removed.

@@ -4,6 +4,24 @@ Personal ad-block filters and one userscript. Use the subscribe links for browse
 
 ## Filter lists
 
+### fuckquotidianilocali — all four local newspapers
+
+One subscription combining QuiAntella, Gazzettino del Chianti, Dai Colli
+Fiorentini, and Firenze e Dintorni. YouTube and the userscript are excluded.
+
+- Subscribe: [fuckquotidianilocali](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckquotidianilocali.txt&title=fuckquotidianilocali)
+- Raw: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fuckquotidianilocali.txt`
+
+Use the bundle in place of the four individual subscriptions below. Their URLs
+remain available if you prefer selecting individual sites. The generated bundle
+supports AdGuard differential updates; uBlock Origin can download the complete
+list. Mark the new subscription as trusted for the existing Firenze text-cleanup
+scriptlets to apply. Import it as a custom content filter, not a DNS blocklist.
+
+During review, this link becomes available on `main` only after the bundle PR
+is merged. See [bundle maintenance](docs/bundle-maintenance.md) for generation,
+history, validation, and client limitations.
+
 ### fuckquiantella
 
 For `quiantella.it`.

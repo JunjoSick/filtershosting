@@ -1,0 +1,7 @@
+/fuckquotidianilocali.txt text eol=lf
+/diffs/** text eol=lf
+/history/** text eol=lf
+/tools/** text eol=lf
+/test/** text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
