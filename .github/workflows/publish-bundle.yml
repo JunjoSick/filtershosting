@@ -4,12 +4,16 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Reconcile even if a push event was suppressed, dropped, or its job failed.
+  # The configuration job still skips the writer while the flag is false.
+  schedule:
+    - cron: '17 * * * *'
 
 permissions:
   contents: read
 
-# Every main push is considered so a concurrent unrelated commit also queues a
-# fresh attempt. A no-op makes no commit. GITHUB_TOKEN pushes do not retrigger it.
+# Coalesce queued events: every run fetches current main again on each attempt.
+# Keep the active writer; periodic catch-up does not depend on a push event.
 concurrency:
   group: publish-fuckquotidianilocali
   cancel-in-progress: false
@@ -38,7 +42,7 @@ jobs:
     needs: configuration
     if: needs.configuration.outputs.enabled == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     # Temporary permission for this job only, never a PAT or repository setting.
     permissions:
       contents: write
@@ -52,17 +56,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '24'
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm test
-      - run: npm run build
-      - run: npm run check
-      - id: commit
-        name: Validate history and commit generated files only
-        run: |
-          changed=$(node tools/automation.mjs commit)
-          echo "changed=$changed" >> "$GITHUB_OUTPUT"
-      - name: Publish with a normal fast-forward-only push
-        if: steps.commit.outputs.changed == 'true'
+      - name: Reconcile from fresh main with bounded retries
         env:
           GH_TOKEN: ${{ github.token }}
-        run: git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin HEAD:refs/heads/main
+        run: node tools/publish.mjs

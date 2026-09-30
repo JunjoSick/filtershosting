@@ -34,8 +34,8 @@ export async function checkCiOutputs(root) {
   return files;
 }
 
-// Prepare one local commit. Network publication is a separate, guarded workflow
-// step using the job token and an ordinary fast-forward-only Git push.
+// Prepare one local commit. tools/publish.mjs handles fresh checkouts and the
+// ordinary fast-forward-only push; a failed candidate must never be rebased.
 export async function preparePublicationCommit(root) {
   if (!(await automationEnabled(root))) throw new Error('Automatic publishing is disabled');
   await checkBundle(root);

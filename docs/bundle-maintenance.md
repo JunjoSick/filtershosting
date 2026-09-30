@@ -43,36 +43,82 @@ With the flag enabled:
 1. A source-only PR triggers read-only CI: generate the candidate bundle, run
    tests, verify checksums/history, and reject changes outside generated paths.
    Committing generated files manually is no longer required.
-2. Every push to `main` queues the publisher. Its write job runs only when the
-   flag read from `main` is true. It checks out the latest `main`, regenerates,
-   tests and validates, then commits the bundle, snapshots, manifest and patch
-   edges together. Source-only changes become visible in the individual lists
-   before this job updates the bundle; all bundle artifacts share one commit.
-3. No content change means no commit and no push. The publisher is serialized
-   with `cancel-in-progress: false`. If another main commit arrives while it is
-   running, the ordinary Git push rejects the stale update instead of forcing
-   over it; the queued run starts from the newer main. Manual rerun is available
-   through `workflow_dispatch` after an infrastructure failure.
+2. Pushes to `main`, a manual `workflow_dispatch`, and an hourly catch-up at
+   minute 17 UTC use the same publisher. Its write job runs only when the flag
+   read from `main` is true. Source changes can reach the individual lists
+   before the bundle; each bundle revision, snapshot, manifest and patch chain
+   is committed together.
+3. The publisher makes at most three publication attempts, with 5- and
+   10-second backoffs. **Every attempt fetches current main, creates a new
+   detached worktree, rereads the flag, installs its locked dependencies, and
+   executes that checkout's tests, builder and validators.** It never rebases
+   or reuses a rejected candidate or its patches. A normal non-forced push
+   rejects a competing main change. The next attempt starts with the winner's
+   published history, including a completed patch, if another publisher won.
+4. No content change means no commit or push. A post-attempt fetch also detects
+   a main change during a no-op or just after a successful push. After the three
+   attempts, one final **read-only** check of freshly fetched main can confirm
+   that a last push succeeded despite a lost response. This pass only validates
+   committed content; it cannot create a fourth candidate or push.
+5. The publisher uses one concurrency group and `cancel-in-progress: false`.
+   GitHub may replace a pending run with a newer one; each run reconciles the
+   whole latest state, so it does not need every intermediate push event.
+   Hourly catch-up retries after a missed/failed final run, and after source
+   changes made by other `GITHUB_TOKEN` workflows, whose pushes do not trigger
+   another push workflow. A successful run only certifies the main SHA in its
+   summary: a change after its final fetch waits for a later invocation.
 
 Only the gated publishing job requests `contents: write` on GitHub's temporary
-`GITHUB_TOKEN`. Checkout does not persist credentials. The push step passes the
-token through `GH_TOKEN` to GitHub CLI's Git credential helper for that one
-command. It does not create persistent credentials or edit authentication
-settings. GitHub documents that pushes using this job token do not start another
-push workflow; the publishing job performs validation itself before pushing:
+`GITHUB_TOKEN`. Checkout does not persist credentials. The runner passes it via
+`GH_TOKEN` only to Git fetch/push commands and strips both token variables from
+npm, tests and generator subprocesses. The credential helper is specified per
+command; no persistent credentials or authentication settings are created.
+GitHub documents the push-event suppression in its
 [GITHUB_TOKEN documentation](https://docs.github.com/en/actions/concepts/security/github_token).
+The publisher validates its own generated commit before pushing it.
+
+Catch-up is **best effort, not a guaranteed hourly deadline**. GitHub schedules
+run from the default branch, can be delayed or dropped under load, and are
+automatically disabled in public repositories after 60 days without repository
+activity. Minute 17 avoids the documented start-of-hour traffic peak but cannot
+eliminate scheduling failures. See GitHub's
+[schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
+and [concurrency semantics](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+No external monitoring service is installed by this proposal.
+
+Failed reconciliation exits nonzero and records recovery guidance in the job
+summary. The Actions run and step logs show the attempt, fetched SHA and error;
+normal GitHub Actions failure notifications depend on the user's notification
+settings. Each subprocess has a two-minute timeout, and the write job has a
+15-minute overall timeout. A runner crash or timeout may prevent its summary
+from being written; the failed/cancelled run remains visible in Actions.
+
+For recovery, inspect **Actions → Publish filter bundle (opt-in)**, correct the
+reported network, dependency, validation or permission failure, then select
+**Run workflow** on `main`. The same fresh-state reconciliation runs; do not
+push a failed candidate by hand. Check whether GitHub disabled the schedule
+before relying on future timers. If Actions is unavailable, use the manual
+build procedure above from current main and commit all generated files
+atomically. A failed job cannot guarantee recovery until some later invocation
+actually runs successfully.
 
 Existing repository or organization policies may deny the token write access,
 and branch protection may reject direct bot pushes. In that case the job fails
 without changing those policies or creating stronger credentials. The choices
 would be retaining manual publication or separately approving a different
 publication route. No real publishing-token push has been tested while this
-proposal is disabled; concurrency rejection is tested against a local bare Git
-remote. Do not enable the flag simply to test permissions without approval.
+proposal is disabled. Deterministic tests run the actual retry orchestrator
+against local bare Git remotes, including real push rejection, lost responses,
+fresh flag/tool changes, no-op races and a later timer-style invocation after
+all attempts fail. Tests replace registry installation with the already pinned
+local dependencies and use a small fixture test suite to avoid recursion;
+they do not exercise GitHub's scheduler, token policy or raw CDN. Do not enable the flag simply to test permissions without approval.
 
 To pause an activated publisher, set the same flag back to `false`. A run that
 already checked out older main will fail its fast-forward push against that
-newer disabling commit. Future write jobs are skipped.
+newer disabling commit and stop when its next attempt reads the disabled flag.
+A job already granted temporary write permission may still finish that read,
+but cannot publish over the disabling commit. Future write jobs are skipped.
 
 The local build uses an exclusive `.bundle-build.lock` directory. A competing
 build fails; source or artifact changes during generation also fail before any
