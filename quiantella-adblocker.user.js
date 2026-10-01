@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         QuiAntella Inline Ad Blocker
 // @namespace    https://github.com/JunjoSick/filtershosting
-// @version      1.2.0
+// @version      1.3.0
 // @description  Removes inline real estate ads from QuiAntella articles
 // @author       JunjoSick
 // @match        https://www.quiantella.it/*
@@ -29,7 +29,7 @@
   const REAL_ESTATE_KEYWORDS =
     /\b(MQ|APPARTAMENTO|BAGNI|CAMERE|IMMOBILE|PIANO|GIARDINO|TERRAZZA)\b/;
   const CONTACT_REGEX =
-    /\bPer informazioni\b|\bImmobiliare\b.*\d{6,}|\b(055|333|334|335|338|339|347|348|349|366|388|392|393)\d{6,}/i;
+    /^Per informazioni\s*:?\s*Il Peruzzi Immobiliare\b/i;
 
   function isP(el) {
     return el?.tagName === "P";
@@ -75,11 +75,16 @@
 
       let next = h3.nextElementSibling;
       let safety = 0;
+      let confirmedContact = false;
 
       while (next && safety < 5) {
-        if (isSlideshow(next) || isAllCapsRealEstate(next)) {
+        // Separators are provisional: they never establish an advertisement.
+        if (next.tagName === "HR" && next.classList.contains("wp-block-separator")) {
+          adBlock.push(next);
+        } else if (isSlideshow(next) || isAllCapsRealEstate(next)) {
           adBlock.push(next);
         } else if (isContactInfo(next)) {
+          confirmedContact = true;
           adBlock.push(next);
           break;
         } else {
@@ -89,7 +94,8 @@
         safety++;
       }
 
-      if (adBlock.length >= 2) {
+      // Require the verified advertiser contact, not just a title plus separator.
+      if (confirmedContact) {
         for (const el of adBlock) toRemove.add(el);
       }
     });
