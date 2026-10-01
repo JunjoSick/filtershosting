@@ -1,7 +1,7 @@
 ! Title: fuckgazzettinodelchianti
 ! Description: Filter to block ads on Il Gazzettino del Chianti's website, might break from time to time
 ! Author: JunjoSick
-! Version: 1.1.0
+! Version: 1.1.1
 ! Expires: 30 days
 ! Homepage: https://github.com/JunjoSick/filtershosting
 ! Licence: https://github.com/JunjoSick/filtershosting/blob/main/LICENSE
@@ -48,6 +48,11 @@ gazzettinodelchianti.it##img[src*="/BannerCoopMercataleGazzettinoNuovo"]
 gazzettinodelchianti.it##img[src*="/Banner-BB2025"]
 gazzettinodelchianti.it##img[src*="/BannerArciSanCascianoGazzettinoNuovo"]
 gazzettinodelchianti.it##img[src*="/Banner-Banco-Fiorentino-2025_1"]
+! Vignamaggio Festa della Raccolta 2026: mobile and desktop campaign creatives.
+||gazzettinodelchianti.it/wp-content/uploads/2026/09/Gazzettino-720x140-Festa-Raccolta-26.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/09/Gazzettino-1160x80-Festa-Raccolta-26.gif$image
+gazzettinodelchianti.it##img[src*="/Gazzettino-720x140-Festa-Raccolta-26.gif"]
+gazzettinodelchianti.it##img[src*="/Gazzettino-1160x80-Festa-Raccolta-26.gif"]
 ! Newspaper background takeover can leave a page-wide Android long-press/callout target.
 gazzettinodelchianti.it#$#body.td-background-link { background-image: none !important; cursor: auto !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; user-select: text !important; }
 gazzettinodelchianti.it#$#body.td-background-link .td-container-wrap, body.td-background-link .td-header-container, body.td-background-link .td-post-header, body.td-background-link .td-container { cursor: auto !important; -webkit-touch-callout: default !important; }
@@ -78,6 +83,9 @@ gazzettinodelchianti.it###pum-142892
 gazzettinodelchianti.it###pum-142885
 gazzettinodelchianti.it##img[src*="/POP-UP-PLUS_UnipolSai-Polizza-Vita"]
 gazzettinodelchianti.it##img[src*="/POP-UP-Studio-Landi-Luglio"]
+! Unipol Sai extreme-weather campaign, including WordPress resized PNG variants.
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/POP-UP-PLUS-Unipol-Sai-eventi-climatici*.png$image
+gazzettinodelchianti.it##img[src*="/POP-UP-PLUS-Unipol-Sai-eventi-climatici"]
 ! Android fallback: Popup Maker can leave a transparent overlay or html scroll lock after visible content is hidden.
 gazzettinodelchianti.it#$#.pum-overlay, .pum-overlay.pum-active, .popmake-overlay, .pum-container.popmake, .pum-container.popmake.active { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 gazzettinodelchianti.it#$#html.pum-open, html.pum-open.pum-open-overlay, html[class*="pum-open"], body[class*="pum-open"] { overflow: auto !important; position: static !important; height: auto !important; padding-right: 0 !important; touch-action: auto !important; }
