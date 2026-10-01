@@ -5,6 +5,11 @@
       "version": "1.0.0",
       "created": "2026-09-30T16:35:30.199Z",
       "sha256": "07e3a8843c15de5a4e5abac077390aadfebb22b0814fdcf8a139f5510eb35b0a"
+    },
+    {
+      "version": "1.0.1",
+      "created": "2026-10-01T11:56:18.158Z",
+      "sha256": "791c6978166e6b9e5b75754eee790c0dbf421531ff3d199c92cee3d9723a4ac6"
     }
   ]
 }

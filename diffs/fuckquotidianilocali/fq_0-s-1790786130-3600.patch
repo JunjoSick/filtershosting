@@ -1,0 +1,19 @@
+diff checksum:9fe08ce24537fe63203f81d392cf615b4c839306 lines:18
+d2 2
+a3 2
+! Checksum: EHpSq0v0cJ0AAem7pqvBFg
+! Diff-Path: diffs/fuckquotidianilocali/fq_1-s-1790855778-3600.patch
+d7 2
+a8 2
+! Version: 1.0.1
+! TimeUpdated: 2026-10-01T11:56:18.158Z
+a146 5
+! Vignamaggio Festa della Raccolta 2026: mobile and desktop campaign creatives.
+||gazzettinodelchianti.it/wp-content/uploads/2026/09/Gazzettino-720x140-Festa-Raccolta-26.gif$image
+||gazzettinodelchianti.it/wp-content/uploads/2026/09/Gazzettino-1160x80-Festa-Raccolta-26.gif$image
+gazzettinodelchianti.it##img[src*="/Gazzettino-720x140-Festa-Raccolta-26.gif"]
+gazzettinodelchianti.it##img[src*="/Gazzettino-1160x80-Festa-Raccolta-26.gif"]
+a176 3
+! Unipol Sai extreme-weather campaign, including WordPress resized PNG variants.
+||gazzettinodelchianti.it/wp-content/uploads/2020/04/POP-UP-PLUS-Unipol-Sai-eventi-climatici*.png$image
+gazzettinodelchianti.it##img[src*="/POP-UP-PLUS-Unipol-Sai-eventi-climatici"]
