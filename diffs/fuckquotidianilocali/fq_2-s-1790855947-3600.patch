@@ -1,0 +1,141 @@
+diff checksum:0b0d0799f7d915d890ca70a2abc1fce3ac0cee63 lines:140
+d2 2
+a3 2
+! Checksum: H/xkFPFiTZFUzVy2JgSrbw
+! Diff-Path: diffs/fuckquotidianilocali/fq_3-s-1790864078-3600.patch
+d7 2
+a8 2
+! Version: 1.0.3
+! TimeUpdated: 2026-10-01T14:14:37.563Z
+a30 112
+! Verified 2020 standalone commercial creatives (dated paths, never basename wildcards).
+! Network rules include only the original and WordPress numeric size derivatives.
+! Media classes also match lazy placeholders; collapse only their own figures.
+! Libri & Giornali
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/06\/libri-e-giornali(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39803
+quiantella.it##img[data-src$="/wp-content/uploads/2020/06/libri-e-giornali.jpg"], img[data-src*="/wp-content/uploads/2020/06/libri-e-giornali.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39803)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39803)
+! Molla L'Osso
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/QA_mollalosso(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39210
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/QA_mollalosso.png"], img[data-src*="/wp-content/uploads/2020/05/QA_mollalosso.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39210)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39210)
+! Rapid Foto Center
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/qa_rapid_foto_center(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39337
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/qa_rapid_foto_center.png"], img[data-src*="/wp-content/uploads/2020/05/qa_rapid_foto_center.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39337)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39337)
+! Silvia CreaModa
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/scm_def(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-38989
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/scm_def.jpg"], img[data-src*="/wp-content/uploads/2020/05/scm_def.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-38989)
+quiantella.it#?#.entry-content figure:has(img.wp-image-38989)
+! Edicolandia
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/QA_edicolandia-1(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39285
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/QA_edicolandia-1.png"], img[data-src*="/wp-content/uploads/2020/05/QA_edicolandia-1.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39285)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39285)
+! Rettori 1928
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/06\/672x560(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39990
+quiantella.it##img[data-src$="/wp-content/uploads/2020/06/672x560.jpg"], img[data-src*="/wp-content/uploads/2020/06/672x560.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39990)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39990)
+! Di Tutto Un Po
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/DI-TUTTO-UN-PO-1(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39352
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/DI-TUTTO-UN-PO-1.jpg"], img[data-src*="/wp-content/uploads/2020/05/DI-TUTTO-UN-PO-1.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39352)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39352)
+! Pescheria Marisa
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/06\/QA_mARISA-3(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39394
+quiantella.it##img[data-src$="/wp-content/uploads/2020/06/QA_mARISA-3.jpg"], img[data-src*="/wp-content/uploads/2020/06/QA_mARISA-3.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39394)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39394)
+! Immobiliare Merciai
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/06\/image(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39392
+quiantella.it##img[data-src$="/wp-content/uploads/2020/06/image.png"], img[data-src*="/wp-content/uploads/2020/06/image.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39392)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39392)
+! Donatella Gallori Photographer
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/06\/banner-definitivo(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-40111
+quiantella.it##img[data-src$="/wp-content/uploads/2020/06/banner-definitivo.jpg"], img[data-src*="/wp-content/uploads/2020/06/banner-definitivo.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-40111)
+quiantella.it#?#.entry-content figure:has(img.wp-image-40111)
+! Silvia CreaModa
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/06\/scm_def(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39758
+quiantella.it##img[data-src$="/wp-content/uploads/2020/06/scm_def.jpg"], img[data-src*="/wp-content/uploads/2020/06/scm_def.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39758)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39758)
+! Immobiliare Merciai
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/Merciai(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39348
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/Merciai.png"], img[data-src*="/wp-content/uploads/2020/05/Merciai.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39348)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39348)
+! Rettori 1928
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/07\/Rettori(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-40510
+quiantella.it##img[data-src$="/wp-content/uploads/2020/07/Rettori.jpg"], img[data-src*="/wp-content/uploads/2020/07/Rettori.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-40510)
+quiantella.it#?#.entry-content figure:has(img.wp-image-40510)
+! Pescheria Marisa
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/QA_mARISA-3(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39331
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/QA_mARISA-3.jpg"], img[data-src*="/wp-content/uploads/2020/05/QA_mARISA-3.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39331)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39331)
+! Di Tutto Un Po
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/DI-TUTTO-UN-PO(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39184
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/DI-TUTTO-UN-PO.jpg"], img[data-src*="/wp-content/uploads/2020/05/DI-TUTTO-UN-PO.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39184)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39184)
+! Edicolandia
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/05\/QA_edicolandia(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-39217
+quiantella.it##img[data-src$="/wp-content/uploads/2020/05/QA_edicolandia.png"], img[data-src*="/wp-content/uploads/2020/05/QA_edicolandia.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-39217)
+quiantella.it#?#.entry-content figure:has(img.wp-image-39217)
+! Rettori 1928
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/09\/Rettori(?:-[0-9]+x[0-9]+)?\.jpg(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-41698
+quiantella.it##img[data-src$="/wp-content/uploads/2020/09/Rettori.jpg"], img[data-src*="/wp-content/uploads/2020/09/Rettori.jpg?"]
+quiantella.it##.entry-content figure:has(img.wp-image-41698)
+quiantella.it#?#.entry-content figure:has(img.wp-image-41698)
+! Molla L'Osso
+/^https?:\/\/(?:www\.quiantella\.it|i[0-3]\.wp\.com\/www\.quiantella\.it)\/wp-content\/uploads\/2020\/09\/QA_mollalosso(?:-[0-9]+x[0-9]+)?\.png(?:[?#]|$)/$image,domain=quiantella.it
+quiantella.it##img.wp-image-41726
+quiantella.it##img[data-src$="/wp-content/uploads/2020/09/QA_mollalosso.png"], img[data-src*="/wp-content/uploads/2020/09/QA_mollalosso.png?"]
+quiantella.it##.entry-content figure:has(img.wp-image-41726)
+quiantella.it#?#.entry-content figure:has(img.wp-image-41726)
+
+d63 13
+a75 16
+! Verified Peruzzi campaigns: independent list-only support; preserve ordinary mentions.
+! November 2023 San Polo and January-February 2026 Picille ad-only galleries.
+quiantella.it##.entry-content .wp-block-jetpack-slideshow:has(img[data-id="70921"])
+quiantella.it#?#.entry-content .wp-block-jetpack-slideshow:has(img[data-id="70921"])
+quiantella.it##.entry-content .wp-block-jetpack-slideshow:has(img[data-id="92038"])
+quiantella.it#?#.entry-content .wp-block-jetpack-slideshow:has(img[data-id="92038"])
+quiantella.it##.entry-content p:has-text(/^Per informazioni\s*:?\s*Il Peruzzi Immobiliare\b/)
+quiantella.it##.entry-content h3:has-text(/^Appartamento in (?:antica )?villa in vendita a Picille(?: \(Antella\)?)?\s*$/)
+quiantella.it##.entry-content p:has-text(/^ANTELLA, A 2 KM DAL PAESE IN LOCALITA’ PICILLE,.*PROPONIAMO IMMOBILE DI PREGIO IN VILLA STORICA DEL 1700/)
+quiantella.it##.entry-content p:has-text(/^[—–-]{10,}\s*$/):has(+ h3:has-text(/^Appartamento in (?:antica )?villa in vendita a Picille(?: \(Antella\)?)?\s*$/))
+quiantella.it##.entry-content h3:has-text(/^Appartamento in (?:antica )?villa in vendita a Picille(?: \(Antella\)?)?\s*$/) + hr.wp-block-separator:has(+ .wp-block-jetpack-slideshow img[data-id="92038"])
+quiantella.it#?#.entry-content p:contains(/^Per informazioni\s*:?\s*Il Peruzzi Immobiliare\b/)
+quiantella.it#?#.entry-content h3:contains(/^Appartamento in (?:antica )?villa in vendita a Picille(?: \(Antella\)?)?\s*$/)
+quiantella.it#?#.entry-content p:contains(/^ANTELLA, A 2 KM DAL PAESE IN LOCALITA’ PICILLE,.*PROPONIAMO IMMOBILE DI PREGIO IN VILLA STORICA DEL 1700/)
+quiantella.it#?#.entry-content p:contains(/^[—–-]{10,}\s*$/):has(+ h3:contains(/^Appartamento in (?:antica )?villa in vendita a Picille(?: \(Antella\)?)?\s*$/))
+quiantella.it#?#.entry-content h3:contains(/^Appartamento in (?:antica )?villa in vendita a Picille(?: \(Antella\)?)?\s*$/) + hr.wp-block-separator:has(+ .wp-block-jetpack-slideshow img[data-id="92038"])
+d100 1
