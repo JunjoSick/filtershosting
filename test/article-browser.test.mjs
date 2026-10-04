@@ -1,27 +1,22 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { outputs, classify } from '../tools/article-cards.mjs';
 import { testNativeStyles } from './support/article-native-browser.mjs';
-const binary = ['/usr/lib/chromium/chromium','/usr/bin/chromium','/usr/bin/google-chrome'].find(existsSync);
-const root = new URL('../', import.meta.url).pathname;
-test('applied native subscription, ExtendedCss negative control and userscript lifecycle', { skip: !binary }, async t => {
-  const temporary = await mkdtemp(path.join(tmpdir(), 'article-browser-')); t.after(() => rm(temporary, { recursive: true, force: true }));
+import { launchBrowser } from './support/browser-launch.mjs';
+const root = fileURLToPath(new URL('../', import.meta.url));
+test('applied native subscription, ExtendedCss negative control and userscript lifecycle', async t => {
   const text = (await outputs(root)).get('sponsored-article-cards.txt');
   const library = await readFile(path.join(root, 'node_modules/@adguard/extended-css/dist/extended-css.js'), 'utf8');
   const legacy = JSON.parse(await readFile(new URL('./fixtures/article-legacy-extended-rule.json', import.meta.url), 'utf8')).rule.split('#?#')[1];
   const p = JSON.parse(await readFile(path.join(root, 'article-cards/registries/gazzettinodelchianti.it.json'), 'utf8')).paths[0];
   const card = (href, id = 'card') => `<div id="${id}" class="td_module_flex td_module_wrap td-cpt-post"><div class="td-module-container"><div class="td-module-meta-info"><h3 class="td-module-title"><a href="${href}">Invented title</a></h3></div></div></div>`;
-  const profile = path.join(temporary, 'profile');
-  const browser = spawn(binary, ['--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--disable-background-networking','--no-first-run','--remote-debugging-port=0','--user-data-dir=' + profile,'about:blank'], { stdio: ['ignore','ignore','ignore'], env: {...process.env,XDG_CACHE_HOME:path.join(temporary,'cache'),XDG_CONFIG_HOME:path.join(temporary,'config')} });
-  t.after(()=>browser.kill('SIGKILL'));
-  let port;
-  for(let i=0;i<100;i++){try{port=(await readFile(path.join(profile,'DevToolsActivePort'),'utf8')).split('\n')[0];break;}catch{await new Promise(r=>setTimeout(r,100));}}
-  assert.ok(port,'Chromium debugging endpoint started');
+  const browser = await launchBrowser();
+  t.after(() => browser.close());
+  const { port } = browser;
+  console.log('Browser test runtime:', JSON.stringify({executable:browser.executable,version:browser.version}));
   const tabs=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const ws=new WebSocket(tabs.find(t=>t.type==='page').webSocketDebuggerUrl); t.after(()=>ws.close());
   await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
