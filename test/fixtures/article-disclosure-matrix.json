@@ -1,0 +1,338 @@
+[
+  {
+    "site": "gdc",
+    "name": "plain_terminal",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "strong_terminal",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p><strong>CONTENUTO SPONSORIZZATO</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "terminal_br",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazioni del laboratorio.<br><strong>CONTENUTO SPONSORIZZATO</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "legacy_pre",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><pre><strong>CONTENUTO SPONSORIZZATO</strong></pre>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "ordinary_link",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Consulta <a href=\"https://example.invalid/programma/\">il programma completo</a>.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "ordinary_image",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"></p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "ordinary_figure",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><figure><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"><figcaption>Il laboratorio immaginario</figcaption></figure><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "realistic_link_and_image",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><figure class=\"wp-block-image\"><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"></figure><p>Per prenotare, <a href=\"https://example.invalid/contatti/\" rel=\"noopener\">contatta il laboratorio</a>.</p><p><strong>CONTENUTO SPONSORIZZATO</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "earlier_class",
+    "group": "unrelated markup",
+    "html": "<p class=\"wp-block-paragraph\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "earlier_id",
+    "group": "unrelated markup",
+    "html": "<p id=\"informazioni\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "earlier_lang",
+    "group": "unrelated markup",
+    "html": "<p lang=\"it\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "earlier_color",
+    "group": "unrelated markup",
+    "html": "<p style=\"color:navy\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "earlier_heading",
+    "group": "unrelated markup",
+    "html": "<h2>Programma della giornata</h2><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "earlier_list",
+    "group": "unrelated markup",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><ul><li>Visita al laboratorio</li><li>Dimostrazione</li></ul><p>CONTENUTO SPONSORIZZATO</p>",
+    "expected": "block"
+  },
+  {
+    "site": "gdc",
+    "name": "label_class",
+    "group": "label or ancestor",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p class=\"wp-block-paragraph\">CONTENUTO SPONSORIZZATO</p>",
+    "expected": "review"
+  },
+  {
+    "site": "gdc",
+    "name": "ancestor_class",
+    "group": "label or ancestor",
+    "html": "<div class=\"article-text\"><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>CONTENUTO SPONSORIZZATO</p></div>",
+    "expected": "review"
+  },
+  {
+    "site": "quiantella",
+    "name": "plain_terminal",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "strong_terminal",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p><strong>Informazione promozionale</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "terminal_br",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazioni del laboratorio.<br><strong>Informazione promozionale</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "legacy_pre",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><pre><strong>Informazione promozionale</strong></pre>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "ordinary_link",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Consulta <a href=\"https://example.invalid/programma/\">il programma completo</a>.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "ordinary_image",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"></p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "ordinary_figure",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><figure><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"><figcaption>Il laboratorio immaginario</figcaption></figure><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "realistic_link_and_image",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><figure class=\"wp-block-image\"><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"></figure><p>Per prenotare, <a href=\"https://example.invalid/contatti/\" rel=\"noopener\">contatta il laboratorio</a>.</p><p><strong>Informazione promozionale</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "earlier_class",
+    "group": "unrelated markup",
+    "html": "<p class=\"wp-block-paragraph\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "earlier_id",
+    "group": "unrelated markup",
+    "html": "<p id=\"informazioni\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "earlier_lang",
+    "group": "unrelated markup",
+    "html": "<p lang=\"it\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "earlier_color",
+    "group": "unrelated markup",
+    "html": "<p style=\"color:navy\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "earlier_heading",
+    "group": "unrelated markup",
+    "html": "<h2>Programma della giornata</h2><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "earlier_list",
+    "group": "unrelated markup",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><ul><li>Visita al laboratorio</li><li>Dimostrazione</li></ul><p>Informazione promozionale</p>",
+    "expected": "block"
+  },
+  {
+    "site": "quiantella",
+    "name": "label_class",
+    "group": "label or ancestor",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p class=\"wp-block-paragraph\">Informazione promozionale</p>",
+    "expected": "review"
+  },
+  {
+    "site": "quiantella",
+    "name": "ancestor_class",
+    "group": "label or ancestor",
+    "html": "<div class=\"article-text\"><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazione promozionale</p></div>",
+    "expected": "review"
+  },
+  {
+    "site": "colli",
+    "name": "plain_terminal",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "strong_terminal",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p><strong>Articolo ADV</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "terminal_br",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Informazioni del laboratorio.<br><strong>Articolo ADV</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "legacy_pre",
+    "group": "control",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><pre><strong>Articolo ADV</strong></pre>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "ordinary_link",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Consulta <a href=\"https://example.invalid/programma/\">il programma completo</a>.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "ordinary_image",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"></p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "ordinary_figure",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><figure><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"><figcaption>Il laboratorio immaginario</figcaption></figure><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "realistic_link_and_image",
+    "group": "unrelated link/image",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><figure class=\"wp-block-image\"><img src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\" alt=\"Facciata del laboratorio immaginario\" width=\"1\" height=\"1\"></figure><p>Per prenotare, <a href=\"https://example.invalid/contatti/\" rel=\"noopener\">contatta il laboratorio</a>.</p><p><strong>Articolo ADV</strong></p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "earlier_class",
+    "group": "unrelated markup",
+    "html": "<p class=\"wp-block-paragraph\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "earlier_id",
+    "group": "unrelated markup",
+    "html": "<p id=\"informazioni\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "earlier_lang",
+    "group": "unrelated markup",
+    "html": "<p lang=\"it\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "earlier_color",
+    "group": "unrelated markup",
+    "html": "<p style=\"color:navy\">Introduzione ordinaria.</p><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "earlier_heading",
+    "group": "unrelated markup",
+    "html": "<h2>Programma della giornata</h2><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "earlier_list",
+    "group": "unrelated markup",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><ul><li>Visita al laboratorio</li><li>Dimostrazione</li></ul><p>Articolo ADV</p>",
+    "expected": "block"
+  },
+  {
+    "site": "colli",
+    "name": "label_class",
+    "group": "label or ancestor",
+    "html": "<p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p class=\"wp-block-paragraph\">Articolo ADV</p>",
+    "expected": "review"
+  },
+  {
+    "site": "colli",
+    "name": "ancestor_class",
+    "group": "label or ancestor",
+    "html": "<div class=\"article-text\"><p>Il laboratorio immaginario apre sabato alle dieci. Il programma comprende una visita e una dimostrazione. La partecipazione è gratuita e i dettagli sono disponibili presso la sede.</p><p>Articolo ADV</p></div>",
+    "expected": "review"
+  }
+]
