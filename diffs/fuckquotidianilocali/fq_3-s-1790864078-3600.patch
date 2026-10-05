@@ -1,0 +1,12 @@
+diff checksum:a8298723534e245c9d8dc7f100e8662428cd9b2b lines:11
+d2 2
+a3 2
+! Checksum: WvZAchwcaytJsCvn1srOrA
+! Diff-Path: diffs/fuckquotidianilocali/fq_4-s-1791200331-3600.patch
+d7 2
+a8 2
+! Version: 1.0.4
+! TimeUpdated: 2026-10-05T11:38:51.204Z
+d395 10
+a404 1
+! Preserve publisher article formatting: span textContent replacement removes child markup.

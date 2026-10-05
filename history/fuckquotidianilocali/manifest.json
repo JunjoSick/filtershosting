@@ -20,6 +20,11 @@
       "version": "1.0.3",
       "created": "2026-10-01T14:14:37.563Z",
       "sha256": "5f978e104444b5d815b46e692cf0c05772835382c45c8016dfba3f0d01cdb6c3"
+    },
+    {
+      "version": "1.0.4",
+      "created": "2026-10-05T11:38:51.204Z",
+      "sha256": "eb82c83e24b790eadf563a01ed4e750b5205d2c0ea47b05cbc2e2fa7ab9e9243"
     }
   ]
 }
