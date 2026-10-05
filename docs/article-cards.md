@@ -210,12 +210,15 @@ Invalid responses and any unapproved removal preserve last-good data. A reviewed
 removal requires a client-side `reviewedRemovals` entry with the exact host,
 old/new path-array SHA-256 digests and a nonempty review identifier. This supports
 large or empty reviewed replacements while a version change or server flag alone
-cannot bypass the guard. The current list of pins is empty: no corrections are
-authorized. Pins authorize only direct transitions, and do not compose. A future
+cannot bypass the guard. This release pins the frozen Colli 40-path snapshot
+to the approved 32-path snapshot; the eight unavailable articles become visible
+after the updated userscript successfully refreshes its registry. Pins authorize
+only direct transitions, and do not compose. A future
 removal release must provide reviewed old-to-latest pins for every supported
 cached snapshot, including additive intermediates, or receive separate approval
 for a different migration design. Which paths/old versions to support remains a
-parent policy decision; no such removal is currently authorized.
+review decision. This release supports the frozen draft snapshot; the article
+updater has remained disabled, so no additive publisher snapshots are supported.
 Frozen baseline changes still require separately reviewed code/data
 revisions. Only the fixed raw GitHub per-site registry URL is requested, anonymously.
 An independent 15-second watchdog aborts stuck requests, and unexpected final

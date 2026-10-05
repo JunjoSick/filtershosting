@@ -95,7 +95,7 @@ test('only an exact client-reviewed transition can remove paths, including an em
   const host = 'gazzettinodelchianti.it'; const old = { schema: 1, host, paths: [blocked], snapshot: digest([blocked]) };
   const next = { ...old, paths: [], snapshot: digest([]) }; const key = 'article-cards-v1:' + host;
   for (const pin of [null, { host, fromSnapshot: old.snapshot, toSnapshot: next.snapshot, reviewId: '' }, { host: 'quiantella.it', fromSnapshot: old.snapshot, toSnapshot: next.snapshot, reviewId: 'invented-review' }, { host, fromSnapshot: old.snapshot, toSnapshot: next.snapshot, reviewId: 'invented-review' }]) {
-    const code = source.replace("version: '1.0.3'", "version: '99'").replace('reviewedRemovals: []', 'reviewedRemovals: ' + JSON.stringify(pin ? [pin] : []));
+    const code = source.replace(/version: '[^']*'/, "version: '99'").replace(/reviewedRemovals: \[[^\]]*\]/, 'reviewedRemovals: ' + JSON.stringify(pin ? [pin] : []));
     const x = await setup(t, '<body class="home">' + card() + '</body>', host, { source: code, request: o => o.onload({ status: 200, responseText: JSON.stringify(next) }) });
     x.store.set(key, { data: old, checkedAt: 1 }); await x.api.refresh(); await x.flush();
     const accepted = pin?.reviewId && pin.host === host;
@@ -245,7 +245,24 @@ test('reviewed pins require a direct old-to-current transition; intermediate pin
   for (const direct of [false, true]) {
     const pins = [pin(old, middle), pin(middle, latest), ...(direct ? [pin(old, latest)] : [])];
     const store = new Map([['article-cards-v1:' + host, { data: old, checkedAt: 1 }]]);
-    const x = await setup(t, '<body class="home">' + card() + '</body>', host, { store, source: source.replace('reviewedRemovals: []', 'reviewedRemovals: ' + JSON.stringify(pins)), request: o => o.onload({ status: 200, responseText: JSON.stringify(latest) }) });
+    const x = await setup(t, '<body class="home">' + card() + '</body>', host, { store, source: source.replace(/reviewedRemovals: \[[^\]]*\]/, 'reviewedRemovals: ' + JSON.stringify(pins)), request: o => o.onload({ status: 200, responseText: JSON.stringify(latest) }) });
     await x.api.refresh(); await x.flush(); assert.equal(x.api.paths().size, direct ? 1 : 3); assert.equal(x.w.document.querySelectorAll(mark).length, direct ? 0 : 1);
   }
+});
+
+test('release pin migrates the frozen Colli cache from 40 to 32 approved paths', async t => {
+  const baseline = JSON.parse(await readFile(new URL('../article-cards/baseline/colli.json', import.meta.url), 'utf8'));
+  const next = { schema: 1, host: 'daicollifiorentini.it', paths: baseline.paths, snapshot: digest(baseline.paths) };
+  const removed = ["/cef-di-giacomo-bandinelli-cambia-i-tuoi-infissi-a-meta-prezzo/", "/deliburger-guarda-oltre-tra-aperitivi-pre-tuscany-hall-e-novita-ecco-il-burger-delibeyond/", "/eventi-deliburger-e-tuscany-hall-fatti-un-deliape-e-goditi-lo-show-di-angelo-pintusdeliburger/", "/lo-street-food-holle-market-si-trasferisce-su-glovo-i-prodotti-direttamente-a-domicilio/", "/novita-il-favoloso-panettone-artigianale-di-marco-manzi-al-deliburger-anche-domicilio/", "/ore-2045-fiorentina-vs-milan-prima-dello-stadio-al-deliburger/", "/studio-alfa-omega-di-antella-integra-team-e-servizi/", "/svuotatutto-allholle-market-promo-birra-e-dj-v-per-finire-in/"];
+  const paths = [...next.paths, ...removed].sort();
+  const old = { ...next, paths, snapshot: digest(paths) };
+  assert.equal(old.snapshot, "812e243fd27aa25f597c3328fdb911a6f2e89e765df5c0f219e201b323230083");
+  const key = 'article-cards-v1:' + next.host;
+  const store = new Map([[key, { data: old, checkedAt: 1 }]]);
+  const x = await setup(t, '<body class="home"></body>', next.host, { store, request: o => o.onload({ status: 200, responseText: JSON.stringify(next) }) });
+  assert.equal(x.api.paths().size, 40);
+  await x.api.refresh(); await x.flush();
+  assert.equal(x.api.paths().size, 32);
+  assert.equal(store.get(key).data.snapshot, next.snapshot);
+  for (const p of removed) assert.ok(!x.api.paths().has(p));
 });

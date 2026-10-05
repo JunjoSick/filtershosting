@@ -23,8 +23,8 @@
 (function () {
   'use strict';
   // Exact digest transitions must be separately reviewed with all removed
-  // paths. Empty by default: neither version bumps nor server flags allow removal.
-  const CONFIG = /*__CONFIG__*/ { registryBase: 'https://raw.githubusercontent.com/JunjoSick/filtershosting/main/article-cards/registries', version: '1.0.3', reviewedRemovals: [], debug: false };
+  // paths. Only the approved 40-to-32 Colli release transition is pinned.
+  const CONFIG = /*__CONFIG__*/ { registryBase: 'https://raw.githubusercontent.com/JunjoSick/filtershosting/main/article-cards/registries', version: '1.0.4', reviewedRemovals: [{"host":"daicollifiorentini.it","fromSnapshot":"812e243fd27aa25f597c3328fdb911a6f2e89e765df5c0f219e201b323230083","toSnapshot":"b18b892ea2a1ae324390ee9c0cd389671826a250888d1d1602acb3768a020be1","reviewId":"fucksponsors-release-2026-10-05"}], debug: false };
   const DAY = 86400000;
   const RETRY = 3600000;
   const MARK = 'data-local-article-card';
