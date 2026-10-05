@@ -95,7 +95,7 @@ test('only an exact client-reviewed transition can remove paths, including an em
   const host = 'gazzettinodelchianti.it'; const old = { schema: 1, host, paths: [blocked], snapshot: digest([blocked]) };
   const next = { ...old, paths: [], snapshot: digest([]) }; const key = 'article-cards-v1:' + host;
   for (const pin of [null, { host, fromSnapshot: old.snapshot, toSnapshot: next.snapshot, reviewId: '' }, { host: 'quiantella.it', fromSnapshot: old.snapshot, toSnapshot: next.snapshot, reviewId: 'invented-review' }, { host, fromSnapshot: old.snapshot, toSnapshot: next.snapshot, reviewId: 'invented-review' }]) {
-    const code = source.replace(/version: '[^']*'/, "version: '99'").replace(/reviewedRemovals: \[[^\]]*\]/, 'reviewedRemovals: ' + JSON.stringify(pin ? [pin] : []));
+    const code = source.replace(/version: '[^']*'/, "version: '99'").replace(/reviewedRemovals: \[.*\](?=, debug:)/, 'reviewedRemovals: ' + JSON.stringify(pin ? [pin] : []));
     const x = await setup(t, '<body class="home">' + card() + '</body>', host, { source: code, request: o => o.onload({ status: 200, responseText: JSON.stringify(next) }) });
     x.store.set(key, { data: old, checkedAt: 1 }); await x.api.refresh(); await x.flush();
     const accepted = pin?.reviewId && pin.host === host;
@@ -245,24 +245,99 @@ test('reviewed pins require a direct old-to-current transition; intermediate pin
   for (const direct of [false, true]) {
     const pins = [pin(old, middle), pin(middle, latest), ...(direct ? [pin(old, latest)] : [])];
     const store = new Map([['article-cards-v1:' + host, { data: old, checkedAt: 1 }]]);
-    const x = await setup(t, '<body class="home">' + card() + '</body>', host, { store, source: source.replace(/reviewedRemovals: \[[^\]]*\]/, 'reviewedRemovals: ' + JSON.stringify(pins)), request: o => o.onload({ status: 200, responseText: JSON.stringify(latest) }) });
+    const x = await setup(t, '<body class="home">' + card() + '</body>', host, { store, source: source.replace(/reviewedRemovals: \[.*\](?=, debug:)/, 'reviewedRemovals: ' + JSON.stringify(pins)), request: o => o.onload({ status: 200, responseText: JSON.stringify(latest) }) });
     await x.api.refresh(); await x.flush(); assert.equal(x.api.paths().size, direct ? 1 : 3); assert.equal(x.w.document.querySelectorAll(mark).length, direct ? 0 : 1);
   }
 });
 
-test('release pin migrates the frozen Colli cache from 40 to 32 approved paths', async t => {
-  const baseline = JSON.parse(await readFile(new URL('../article-cards/baseline/colli.json', import.meta.url), 'utf8'));
-  const next = { schema: 1, host: 'daicollifiorentini.it', paths: baseline.paths, snapshot: digest(baseline.paths) };
-  const removed = ["/cef-di-giacomo-bandinelli-cambia-i-tuoi-infissi-a-meta-prezzo/", "/deliburger-guarda-oltre-tra-aperitivi-pre-tuscany-hall-e-novita-ecco-il-burger-delibeyond/", "/eventi-deliburger-e-tuscany-hall-fatti-un-deliape-e-goditi-lo-show-di-angelo-pintusdeliburger/", "/lo-street-food-holle-market-si-trasferisce-su-glovo-i-prodotti-direttamente-a-domicilio/", "/novita-il-favoloso-panettone-artigianale-di-marco-manzi-al-deliburger-anche-domicilio/", "/ore-2045-fiorentina-vs-milan-prima-dello-stadio-al-deliburger/", "/studio-alfa-omega-di-antella-integra-team-e-servizi/", "/svuotatutto-allholle-market-promo-birra-e-dj-v-per-finire-in/"];
-  const paths = [...next.paths, ...removed].sort();
-  const old = { ...next, paths, snapshot: digest(paths) };
-  assert.equal(old.snapshot, "812e243fd27aa25f597c3328fdb911a6f2e89e765df5c0f219e201b323230083");
-  const key = 'article-cards-v1:' + next.host;
-  const store = new Map([[key, { data: old, checkedAt: 1 }]]);
-  const x = await setup(t, '<body class="home"></body>', next.host, { store, request: o => o.onload({ status: 200, responseText: JSON.stringify(next) }) });
-  assert.equal(x.api.paths().size, 40);
-  await x.api.refresh(); await x.flush();
+const releaseBaseline = JSON.parse(await readFile(new URL('../article-cards/baseline/colli.json', import.meta.url), 'utf8'));
+const releaseHost = 'daicollifiorentini.it';
+const releaseKey = 'article-cards-v1:' + releaseHost;
+const releaseData = paths => ({ schema: 1, host: releaseHost, paths: [...paths].sort(), snapshot: digest([...paths].sort()) });
+const releaseRemoved = ["/cef-di-giacomo-bandinelli-cambia-i-tuoi-infissi-a-meta-prezzo/", "/deliburger-guarda-oltre-tra-aperitivi-pre-tuscany-hall-e-novita-ecco-il-burger-delibeyond/", "/eventi-deliburger-e-tuscany-hall-fatti-un-deliape-e-goditi-lo-show-di-angelo-pintusdeliburger/", "/lo-street-food-holle-market-si-trasferisce-su-glovo-i-prodotti-direttamente-a-domicilio/", "/novita-il-favoloso-panettone-artigianale-di-marco-manzi-al-deliburger-anche-domicilio/", "/ore-2045-fiorentina-vs-milan-prima-dello-stadio-al-deliburger/", "/studio-alfa-omega-di-antella-integra-team-e-servizi/", "/svuotatutto-allholle-market-promo-birra-e-dj-v-per-finire-in/"];
+const released = releaseData(releaseBaseline.paths);
+const oldRelease = releaseData([...released.paths, ...releaseRemoved]);
+const futureRelease = releaseData([...released.paths, '/invented-future-sponsored/']);
+const releasePin = JSON.parse(source.match(/reviewedRemovals: (\[.*\]), debug: false/)[1])[0];
+const withPins = pins => source.replace(/reviewedRemovals: \[.*\](?=, debug:)/, 'reviewedRemovals: ' + JSON.stringify(pins));
+
+async function releaseSetup(t, opts = {}) {
+  const store = new Map([[releaseKey, { data: oldRelease, checkedAt: Date.now() }]]);
+  return setup(t, opts.html ?? '<body class="home"></body>', releaseHost, { store, ...opts });
+}
+
+test('release migration restores excluded cards without eager network or storage writes', async t => {
+  assert.equal(oldRelease.snapshot, '812e243fd27aa25f597c3328fdb911a6f2e89e765df5c0f219e201b323230083');
+  const card = p => `<div class="uael-post-wrapper"><a class="uael-post__complete-box-overlay" href="${p}">Invented title</a></div>`;
+  const x = await releaseSetup(t, { html: '<body class="home">' + card(releaseRemoved[0]) + card(released.paths[0]) + '</body>', request: o => o.onload({ status: 200, responseText: JSON.stringify(released) }) });
   assert.equal(x.api.paths().size, 32);
-  assert.equal(store.get(key).data.snapshot, next.snapshot);
-  for (const p of removed) assert.ok(!x.api.paths().has(p));
+  const cards = x.w.document.querySelectorAll('.uael-post-wrapper');
+  assert.ok(!cards[0].matches(mark), 'excluded card remains visible at startup');
+  assert.ok(cards[1].matches(mark), 'approved card is hidden');
+  assert.equal(x.network(), 0);
+  assert.equal(x.store.get(releaseKey).data.snapshot, oldRelease.snapshot, 'startup does not write shared storage');
+  await x.api.refresh(); await x.flush();
+  assert.equal(x.store.get(releaseKey).data.snapshot, released.snapshot);
+  for (const p of releaseRemoved) assert.ok(!x.api.paths().has(p));
+});
+
+test('old cache may skip the released server snapshot and accept subsequent additions', async t => {
+  const x = await releaseSetup(t, { request: o => o.onload({ status: 200, responseText: JSON.stringify(futureRelease) }) });
+  await x.api.refresh(); await x.flush();
+  assert.equal(x.network(), 1);
+  assert.deepEqual([...x.api.paths()].sort(), futureRelease.paths);
+  assert.equal(x.store.get(releaseKey).data.snapshot, futureRelease.snapshot);
+  await x.api.refresh(); assert.equal(x.network(), 1, 'successful daily cache prevents duplicate work');
+});
+
+test('local migration requires exact host, old and new digests, review and removal delta', async t => {
+  const badPins = [
+    { ...releasePin, host: 'quiantella.it' },
+    { ...releasePin, fromSnapshot: 'a'.repeat(64) },
+    { ...releasePin, toSnapshot: 'b'.repeat(64) },
+    { ...releasePin, reviewId: '' },
+    { ...releasePin, removedPaths: releaseRemoved.slice(1) },
+    { ...releasePin, removedPaths: [...releaseRemoved, released.paths[0]] },
+    { ...releasePin, removedPaths: [...releaseRemoved, releaseRemoved[0]] },
+  ];
+  for (const pin of badPins) {
+    const x = await releaseSetup(t, { source: withPins([pin]) });
+    assert.equal(x.api.paths().size, 40);
+    assert.equal(x.network(), 0);
+    assert.equal(x.store.get(releaseKey).data.snapshot, oldRelease.snapshot);
+  }
+});
+
+test('failed latest responses and an unrelated removal retain the locally approved cache', async t => {
+  const ninthRemoval = releaseData(futureRelease.paths.filter(p => p !== released.paths[0]));
+  for (const reply of [
+    { status: 503, responseText: '' },
+    { status: 200, responseText: '{' },
+    { status: 200, responseText: JSON.stringify({ ...futureRelease, snapshot: 'a'.repeat(64) }) },
+    { status: 200, responseText: JSON.stringify(ninthRemoval) },
+  ]) {
+    const x = await releaseSetup(t, { request: o => o.onload(reply) });
+    await x.api.refresh(); await x.flush();
+    assert.deepEqual([...x.api.paths()].sort(), released.paths);
+    assert.equal(x.store.get(releaseKey).data.snapshot, released.snapshot);
+    assert.equal(x.store.get(releaseKey).checkedAt, 0);
+    await x.api.refresh(); assert.equal(x.network(), 1, 'failed attempts retain hourly throttle');
+  }
+});
+
+test('offline migration persists only the approved snapshot without a network request', async t => {
+  const x = await releaseSetup(t, { prepare(w) { Object.defineProperty(w.navigator, 'onLine', { value: false }); } });
+  await x.api.refresh(); await x.flush();
+  assert.equal(x.network(), 0);
+  assert.equal(x.api.paths().size, 32);
+  assert.equal(x.store.get(releaseKey).data.snapshot, released.snapshot);
+});
+
+test('shared stale draft cache cannot roll back an already adopted addition', async t => {
+  const store = new Map([[releaseKey, { data: futureRelease, checkedAt: Date.now() }]]);
+  const x = await releaseSetup(t, { store, request: o => o.onload({ status: 200, responseText: JSON.stringify(futureRelease) }) });
+  store.set(releaseKey, { data: oldRelease, checkedAt: Date.now() });
+  await x.api.refresh(); await x.flush();
+  assert.deepEqual([...x.api.paths()].sort(), futureRelease.paths);
+  assert.equal(store.get(releaseKey).data.snapshot, futureRelease.snapshot);
 });
