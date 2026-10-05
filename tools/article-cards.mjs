@@ -144,7 +144,9 @@ export async function collect(site, { get, now = Date.now(), signal }) {
   for (let page = 1; page <= 3; page++) {
     const response = await get(SITES.firenze + `/it/sezione/19/economia-e-lavoro/pag-${page}.html`);
     const { document } = parseHTML(response.text);
-    const links = [...document.querySelectorAll('article.thumb-info a[href],a[href] > article.thumb-info')];
+    // Section archives use post-large cards; select only their title link,
+    // excluding repeated image/read-more links and unrelated sidebar links.
+    const links = [...document.querySelectorAll('article.post.post-large > .post-content > h2 > a[href],article.thumb-info a[href],a[href] > article.thumb-info')];
     if (!links.length || links.length > 200) throw new Error('Unrecognized/unbounded Firenze archive');
     for (const n of links) {
       const a = n.matches('a') ? n : n.parentElement;
