@@ -205,11 +205,12 @@ does not add uBO's separate `Diff-Expires`/`Diff-Name` metadata or promise its
 differential protocol. uBO uses its full-list update path. The bundle contains
 no runtime `!#include` directives.
 
-The existing trusted Firenze scriptlets still require trusting the new custom
-subscription in the client. Network/cosmetic rules do not become DNS filters.
-No rule behavior was changed to create the bundle, so device/browser checks
-should compare it with the four individual subscriptions using the same trust
-and HTTPS-filtering settings.
+The Firenze section preserves publisher article text and inline markup. Its
+sponsor-wrapper collapse remains separate from article formatting; see
+[firenze-formatting-regression.md](firenze-formatting-regression.md).
+Network/cosmetic rules do not become DNS filters. Device/browser checks should
+compare the bundle with the four individual subscriptions using the same
+client and HTTPS-filtering settings.
 
 Differential support is not a fix for Android's manual-update status display.
 AdGuard confirmed in [issue #6153](https://github.com/AdguardTeam/AdguardForAndroid/issues/6153#issuecomment-5294003933)
