@@ -25,7 +25,7 @@ The initial move changes no filter rules, versions or published artifact bytes.
 The article registry paths, userscript cache migration pins, `fucksponsors.txt`
 and its compatibility alias `sponsored-article-cards.txt` are preserved. Article
 list generation remains `npm run cards:build` / `npm run cards:check`; its updater
-flag is in `config/article-cards-automation.json` and stays disabled.
+flag is in `config/article-cards-automation.json`; daily discovery is enabled.
 
 Run from the repository root:
 

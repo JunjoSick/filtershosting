@@ -21,7 +21,7 @@ lives in `config/`. See `docs/repository-layout.md`.
 - `quiantella-adblocker.user.js`: Tampermonkey/Greasemonkey userscript for dynamic inline QuiAntella real-estate ads.
 - `article-cards/`: article-list data and public registries; preserve registry URLs and cache migration pins.
 - `fucksponsors.txt` and `sponsored-article-cards.txt`: generated article list and compatibility alias.
-- `article-cards.user.js`: generated copy of `sources/userscripts/article-cards.user.js`. Its updater flag is `config/article-cards-automation.json`; preserve its disabled state.
+- `article-cards.user.js`: generated copy of `sources/userscripts/article-cards.user.js`. Its updater flag is `config/article-cards-automation.json`; read its current state and change it only with authorization.
 - `README.md`: public subscription/install links.
 
 ## Maintenance Rules

@@ -41,8 +41,7 @@ events and jobs. Eight unavailable articles remain excluded pending evidence.
 - Optional userscript: [article-cards.user.js](https://raw.githubusercontent.com/JunjoSick/filtershosting/main/article-cards.user.js)
 
 Requires modern uBO or AdGuard with native `:has()` support; older clients are
-unsupported. Android/device integration has not been verified. The daily
-article updater is disabled. See [coverage and client limits](docs/article-cards.md).
+unsupported. Android/device integration has not been verified. The article updater runs daily at 05:43 UTC (GitHub scheduling is best effort). See [coverage and client limits](docs/article-cards.md).
 The draft `sponsored-article-cards.txt` URL remains a generated compatibility alias.
 
 ### fuckquiantella
