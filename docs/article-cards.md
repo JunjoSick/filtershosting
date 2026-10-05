@@ -7,9 +7,10 @@ Direct articles and links inside article bodies remain accessible.
 The optional harsh policy includes disclosed GDC promotions for events and jobs.
 The original subscriptions, bundle history and publisher are unchanged.
 
-Nothing in this draft activates publication. `config/article-cards-automation.json` is
-`enabled: false`. Enabling it, publishing these files, and approving classification
-corrections are separate decisions. The original bundle flag remains as found.
+Daily discovery and publication are enabled by `config/article-cards-automation.json`
+(`enabled: true`). The workflow runs at 05:43 UTC and also supports manual dispatch
+on `main`. Classification corrections remain separate reviewed decisions. The
+original bundle publisher remains enabled with its existing configuration.
 
 ## Data and generation
 
@@ -87,7 +88,7 @@ supersedes the usual procedural dual-client duplication for this optional list.
 ## Daily discovery and safe publication
 
 `update-article-cards.yml` is scheduled at 05:43 UTC daily, with manual dispatch,
-and is gated by the separate disabled flag in both jobs and the runner. GitHub
+and is gated by the separate configuration flag in both jobs and the runner. GitHub
 schedules are best effort. No server, Worker, persistent token or credentials
 are required. Only Git transport receives the ephemeral job token.
 

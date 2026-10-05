@@ -1,4 +1,4 @@
-name: Update optional article cards (disabled)
+name: Update fucksponsors daily
 
 on:
   workflow_dispatch:

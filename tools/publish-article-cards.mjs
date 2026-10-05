@@ -131,7 +131,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   } catch (error) {
     console.error(error.message);
     if (process.env.GITHUB_STEP_SUMMARY) {
-      await appendFile(process.env.GITHUB_STEP_SUMMARY, 'Article-card publication failed. Inspect the failed job logs; after fixing the cause, run **Update optional article cards (disabled)** manually on `main`. The periodic check will also retry while enabled, subject to GitHub scheduling limits.\n');
+      await appendFile(process.env.GITHUB_STEP_SUMMARY, 'Article-card publication failed. Inspect the failed job logs; after fixing the cause, run **Update fucksponsors daily** manually on `main`. The periodic check will also retry while enabled, subject to GitHub scheduling limits.\n');
     }
     process.exitCode = 1;
   }
