@@ -224,6 +224,27 @@ test('Firenze discovery bounds its review-only archive without classifying secti
   const good = await collect('firenze', { get: async () => ({ text: link }) }); assert.equal(good.reviewOnly, true); assert.equal(good.records.length, 3);
   await assert.rejects(collect('firenze', { get: async () => ({ text: link.repeat(201) }) }));
 });
+test('Firenze section archive titles are collected once per card and remain review-only', async t => {
+  const card = '<article class="post post-large"><div class="post-content"><h2><a href="/it/articolo/123/invented.html">Editorial title</a></h2><div><a href="/image-link.html">Image</a></div><div class="post-meta"><a href="/read-more.html">Continue</a></div></div></article>';
+  const unrelated = '<aside><h2><a href="/sidebar.html">Sidebar</a></h2></aside><a href="/navigation.html">Navigation</a>';
+  const urls = [];
+  const batch = await collect('firenze', { get: async url => { urls.push(url); return { text: card + unrelated }; } });
+  assert.deepEqual(urls, [1, 2, 3].map(page => `https://www.firenzedintorni.it/it/sezione/19/economia-e-lavoro/pag-${page}.html`));
+  assert.equal(batch.complete, true); assert.equal(batch.reviewOnly, true);
+  assert.deepEqual(batch.records.map(r => r.url), Array(3).fill('/it/articolo/123/invented.html'));
+  assert.ok(batch.records.every(r => Number.isNaN(r.published) && r.html === ''));
+  await assert.rejects(collect('firenze', { get: async () => ({ text: unrelated }) }), /Unrecognized\/unbounded/);
+  await assert.rejects(collect('firenze', { get: async () => ({ text: card.repeat(201) }) }), /Unrecognized\/unbounded/);
+  const root = await fixture(t); const before = await readFile(path.join(root, 'article-cards/registries/firenzedintorni.it.json'));
+  const report = await discover(root, { log: () => {}, get: async url => {
+    if (url.startsWith('https://www.firenzedintorni.it/')) return { text: card };
+    throw Error('invented offline');
+  } });
+  assert.equal(report.firenze.status, 'complete'); assert.equal(report.firenze.added, 0);
+  assert.equal(report.firenze.reviewOnly, true); assert.ok(report.firenze.review.length > 0);
+  assert.deepEqual(await readFile(path.join(root, 'article-cards/registries/firenzedintorni.it.json')), before);
+});
+
 test('overlength candidates do not poison otherwise valid generated registry', async t => {
   const root = await fixture(t); const long = '/' + 'x'.repeat(4096) + '/';
   assert.equal(exactPath('colli', long), null); assert.throws(() => registry('colli', [long]));
