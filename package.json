@@ -2,13 +2,21 @@
   "name": "filtershosting",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node tools/bundle.mjs build",
     "check": "node tools/bundle.mjs check",
-    "test": "node --test"
+    "test": "node --test",
+    "cards:build": "node tools/article-cards.mjs build",
+    "cards:check": "node tools/article-cards.mjs check"
   },
   "devDependencies": {
-    "@adguard/diff-builder": "1.1.7"
+    "@adguard/diff-builder": "1.1.7",
+    "@adguard/extended-css": "2.2.1",
+    "jsdom": "30.1.1",
+    "linkedom": "0.18.12",
+    "saxes": "6.0.0"
   }
 }

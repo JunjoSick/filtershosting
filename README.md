@@ -1,6 +1,6 @@
 # filtershosting
 
-Personal ad-block filters and one userscript. Use the subscribe links for browser ad blockers; use the raw URLs when a client asks for a direct filter-list URL.
+Personal ad-block filters and optional userscripts. Use the subscribe links for browser ad blockers; use the raw URLs when a client asks for a direct filter-list URL.
 
 ## Filter lists
 
@@ -15,12 +15,28 @@ Fiorentini, and Firenze e Dintorni. YouTube and the userscript are excluded.
 Use the bundle in place of the four individual subscriptions below. Their URLs
 remain available if you prefer selecting individual sites. The generated bundle
 supports AdGuard differential updates; uBlock Origin can download the complete
-list. Mark the new subscription as trusted for the existing Firenze text-cleanup
-scriptlets to apply. Import it as a custom content filter, not a DNS blocklist.
+list. Import it as a custom content filter, not a DNS blocklist.
 
 During review, this link becomes available on `main` only after the bundle PR
 is merged. See [bundle maintenance](docs/bundle-maintenance.md) for generation,
 history, validation, and client limitations.
+
+### fucksponsors - Articoli sponsorizzati e promozionali
+
+Optional article-card filtering for the same four newspapers, separate from the
+ad lists and `fuckquotidianilocali`. Hides selected sponsored and promotional
+cards on supported listings; direct articles and links inside article bodies
+remain accessible. Includes all reviewed GDC sponsored content, including
+events and jobs. Eight unavailable articles remain excluded pending evidence.
+
+- Subscribe: [fucksponsors](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fucksponsors.txt&title=fucksponsors)
+- Raw: `https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fucksponsors.txt`
+- Optional userscript: [article-cards.user.js](https://raw.githubusercontent.com/JunjoSick/filtershosting/main/article-cards.user.js)
+
+Requires modern uBO or AdGuard with native `:has()` support; older clients are
+unsupported. Android/device integration has not been verified. The daily
+article updater is disabled. See [coverage and client limits](docs/article-cards.md).
+The draft `sponsored-article-cards.txt` URL remains a generated compatibility alias.
 
 ### fuckquiantella
 
