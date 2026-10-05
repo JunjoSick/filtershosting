@@ -10,7 +10,7 @@ export const SOURCES = Object.freeze([
   'fuckgazzettinodelchianti.txt',
   'fuckdaicollifiorentini.txt',
   'fuckfirenzedintorni.txt',
-]);
+].map((file) => `sources/filters/${file}`));
 export const BUNDLE = 'fuckquotidianilocali.txt';
 export const HISTORY = 'history/fuckquotidianilocali';
 export const PATCHES = 'diffs/fuckquotidianilocali';
@@ -71,7 +71,7 @@ async function readSources(root) {
 }
 
 function payload(sources) {
-  return SOURCES.map((file) => `! ---- ${file} ----\n${sourceBody(sources.get(file), file)}`).join('\n');
+  return SOURCES.map((file) => `! ---- ${path.basename(file)} ----\n${sourceBody(sources.get(file), file)}`).join('\n');
 }
 
 function render(body, version, created) {

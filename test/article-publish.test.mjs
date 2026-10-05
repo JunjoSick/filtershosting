@@ -13,7 +13,8 @@ async function fixture(t, enabled = true) {
   const root = await mkdtemp(path.join(tmpdir(), 'article-publish-')); t.after(() => rm(root, { recursive: true, force: true }));
   const seed = path.join(root, 'seed'); const remote = path.join(root, 'remote.git'); const runner = path.join(root, 'runner'); await mkdir(seed);
   for (const f of ['article-cards','tools','fucksponsors.txt','sponsored-article-cards.txt','package.json','package-lock.json','.gitignore']) await cp(path.join(repo, f), path.join(seed, f), { recursive: true });
-  await writeFile(path.join(seed, 'article-cards-automation.json'), JSON.stringify({ enabled }) + '\n');
+  await mkdir(path.join(seed, 'config'));
+  await writeFile(path.join(seed, 'config/article-cards-automation.json'), JSON.stringify({ enabled }) + '\n');
   // Only transport is synthetic. Execute the production discovery CLI,
   // report file, exit policy, commit guard and publisher unchanged.
   await writeFile(path.join(seed, 'fixture-http.cjs'), `
@@ -86,7 +87,7 @@ test('failed generation and rejected pushes stay visible; final check cannot cla
 test('concurrent disable is reread before retrying and discards rejected candidate',async t=>{
   const f=await fixture(t);let changed=false;
   const result=await f.publish({run:(c,a,o)=>{
-    if(isPush(c,a)&&!changed){changed=true;git(f.seed,'fetch','origin','main');git(f.seed,'reset','--hard','FETCH_HEAD');execFileSync('node',['-e',"require('fs').writeFileSync('article-cards-automation.json','{\"enabled\":false}\\n')"],{cwd:f.seed});git(f.seed,'add','.');git(f.seed,'commit','-m','Disable');git(f.seed,'push','origin','main');}
+    if(isPush(c,a)&&!changed){changed=true;git(f.seed,'fetch','origin','main');git(f.seed,'reset','--hard','FETCH_HEAD');execFileSync('node',['-e',"require('fs').writeFileSync('config/article-cards-automation.json','{\"enabled\":false}\\n')"],{cwd:f.seed});git(f.seed,'add','.');git(f.seed,'commit','-m','Disable');git(f.seed,'push','origin','main');}
     return f.run(c,a,o);
   }});assert.equal(result.status,'disabled');assert.equal(result.attempt,2);assert.equal(git(f.remote,'show','main:article-cards/state.json').includes('invented-publisher-test'),false);f.clean();
 });

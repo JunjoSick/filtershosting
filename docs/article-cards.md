@@ -7,7 +7,7 @@ Direct articles and links inside article bodies remain accessible.
 The optional harsh policy includes disclosed GDC promotions for events and jobs.
 The original subscriptions, bundle history and publisher are unchanged.
 
-Nothing in this draft activates publication. `article-cards-automation.json` is
+Nothing in this draft activates publication. `config/article-cards-automation.json` is
 `enabled: false`. Enabling it, publishing these files, and approving classification
 corrections are separate decisions. The original bundle flag remains as found.
 

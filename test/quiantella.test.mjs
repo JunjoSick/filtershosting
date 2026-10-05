@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { test } from 'node:test';
 
-const source = readFileSync(new URL('../quiantella-adblocker.user.js', import.meta.url), 'utf8');
-const filters = readFileSync(new URL('../fuckquiantella.txt', import.meta.url), 'utf8').split(/\r?\n/);
+const source = readFileSync(new URL('../sources/userscripts/quiantella-adblocker.user.js', import.meta.url), 'utf8');
+const filters = readFileSync(new URL('../sources/filters/fuckquiantella.txt', import.meta.url), 'utf8').split(/\r?\n/);
 // Minimal synthetic DOM: removal changes siblings and subsequent observer passes.
 function element(tagName, textContent = '', classes = []) {
   return { tagName, textContent, classes, children: [], classList: { contains: c => classes.includes(c) } };

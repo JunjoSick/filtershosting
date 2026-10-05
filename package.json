@@ -6,8 +6,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "node tools/bundle.mjs build",
-    "check": "node tools/bundle.mjs check",
+    "build": "node tools/public-files.mjs build && node tools/bundle.mjs build",
+    "check": "node tools/public-files.mjs check && node tools/bundle.mjs check",
     "test": "node --test",
     "cards:build": "node tools/article-cards.mjs build",
     "cards:check": "node tools/article-cards.mjs check"

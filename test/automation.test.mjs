@@ -1,20 +1,26 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { appendFile, copyFile, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { appendFile, copyFile, cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { BUNDLE, HISTORY, PATCHES, SOURCES, buildBundle } from '../tools/bundle.mjs';
+import { PUBLIC_FILES, buildPublicFiles } from '../tools/public-files.mjs';
+import { BUNDLE, HISTORY, PATCHES, SOURCES, buildBundle as buildBundleOnly } from '../tools/bundle.mjs';
 import { automationEnabled, checkCiOutputs, generatedChanges, preparePublicationCommit } from '../tools/automation.mjs';
+
+async function buildBundle(root) { await buildPublicFiles(root); return buildBundleOnly(root); }
 
 const repo = fileURLToPath(new URL('../', import.meta.url));
 function git(root, ...args) { return execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(); }
 async function fixture(t, enabled) {
   const root = await mkdtemp(path.join(tmpdir(), 'bundle-automation-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
+  await mkdir(path.join(root, 'sources/filters'), { recursive: true });
   await Promise.all(SOURCES.map((file) => copyFile(path.join(repo, file), path.join(root, file))));
-  await writeFile(path.join(root, 'bundle-automation.json'), JSON.stringify({ enabled }));
+  await mkdir(path.join(root, 'config'));
+  await cp(path.join(repo, 'sources'), path.join(root, 'sources'), { recursive: true });
+  await writeFile(path.join(root, 'config/bundle-automation.json'), JSON.stringify({ enabled }));
   await copyFile(path.join(repo, '.gitignore'), path.join(root, '.gitignore'));
   await buildBundle(root);
   git(root, 'init', '-b', 'main');
@@ -34,7 +40,7 @@ test('disabled publishing refuses commits and rejects ambiguous configuration', 
   const root = await fixture(t, false);
   assert.equal(await automationEnabled(root), false);
   await assert.rejects(preparePublicationCommit(root), /disabled/);
-  await writeFile(path.join(root, 'bundle-automation.json'), '{"enabled":"false"}');
+  await writeFile(path.join(root, 'config/bundle-automation.json'), '{"enabled":"false"}');
   await assert.rejects(automationEnabled(root), /boolean/);
 });
 
@@ -43,8 +49,8 @@ test('manual mode still requires committed outputs; enabled mode accepts an auto
   await commitSourceChange(root);
   await buildBundle(root);
   await assert.rejects(checkCiOutputs(root), /commit the generated/);
-  await writeFile(path.join(root, 'bundle-automation.json'), '{"enabled":true}');
-  git(root, 'add', 'bundle-automation.json');
+  await writeFile(path.join(root, 'config/bundle-automation.json'), '{"enabled":true}');
+  git(root, 'add', 'config/bundle-automation.json');
   git(root, 'commit', '-m', 'Enable automation in this local test only');
   assert.ok((await checkCiOutputs(root)).includes(BUNDLE));
 });
@@ -58,7 +64,7 @@ test('automatic publication prepares only generated files and creates no no-op c
   assert.equal(git(root, 'rev-parse', 'HEAD^'), sourceHead);
   const names = git(root, 'diff', '--name-only', 'HEAD^', 'HEAD').split('\n');
   assert.ok(names.includes(BUNDLE));
-  assert.ok(names.every((name) => name === BUNDLE || name.startsWith(`${HISTORY}/`) || name.startsWith(`${PATCHES}/`)));
+  assert.ok(names.every((name) => Object.hasOwn(PUBLIC_FILES, name) || name === BUNDLE || name.startsWith(`${HISTORY}/`) || name.startsWith(`${PATCHES}/`)));
   assert.equal(git(root, 'status', '--porcelain'), '');
   const publishedHead = git(root, 'rev-parse', 'HEAD');
   await buildBundle(root);

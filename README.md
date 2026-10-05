@@ -2,6 +2,13 @@
 
 Personal ad-block filters and optional userscripts. Use the subscribe links for browser ad blockers; use the raw URLs when a client asks for a direct filter-list URL.
 
+## Repository navigation
+
+Editable lists live in [sources/filters](sources/filters), userscripts in
+[sources/userscripts](sources/userscripts), and publisher settings in [config](config).
+The root files remain the public subscription artifacts at their original URLs.
+See [repository layout](docs/repository-layout.md) for generation and checks.
+
 ## Filter lists
 
 ### fuckquotidianilocali — all four local newspapers

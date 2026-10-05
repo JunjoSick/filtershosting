@@ -50,7 +50,7 @@ export async function reconcile(root, {
       checkout = path.join(temporary, 'checkout');
       git(root, 'worktree', 'add', '--detach', checkout, base);
       attached = true;
-      const config = JSON.parse(await readFile(path.join(checkout, 'bundle-automation.json'), 'utf8'));
+      const config = JSON.parse(await readFile(path.join(checkout, 'config/bundle-automation.json'), 'utf8'));
       if (typeof config.enabled !== 'boolean') throw new Error('Automation flag must be a boolean');
       if (!config.enabled) return { status: 'disabled', head: base, attempt };
       log(`${verifyOnly ? 'Final verification' : `Attempt ${attempt}/${maxAttempts}`} from main ${base}`);
@@ -58,9 +58,11 @@ export async function reconcile(root, {
       if (verifyOnly) {
         // check validates the committed bundle against the fresh sources and
         // all retained history. It creates no candidate or patch.
+        local(checkout, 'node', ['tools/public-files.mjs', 'check']);
         local(checkout, 'node', ['tools/bundle.mjs', 'check']);
       } else {
         local(checkout, 'npm', ['test']);
+        local(checkout, 'node', ['tools/public-files.mjs', 'build']);
         local(checkout, 'node', ['tools/bundle.mjs', 'build']);
         local(checkout, 'node', ['tools/bundle.mjs', 'check']);
         local(checkout, 'node', ['tools/automation.mjs', 'commit']);

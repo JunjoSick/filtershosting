@@ -52,7 +52,7 @@ test('applied native subscription, ExtendedCss negative control and userscript l
     assert.equal(visible, true, `${site}: ${name}`); assert.equal(classify(site, html), expected, `${site}: ${name}`);
   }
   console.log('Disclosure matrix browser visibility:', JSON.stringify({cases:matrix.length,visible:matrix.length}));
-  let userscript=await readFile(path.join(root,'article-cards.user.js'),'utf8');
+  let userscript=await readFile(path.join(root,'sources/userscripts/article-cards.user.js'),'utf8');
   userscript=userscript.replace('debug: false','debug: true').replace("const host = location.hostname.toLowerCase().replace(/^www\\./, '');","const host = 'gazzettinodelchianti.it';");
   const invented='/invented-sponsored/';const many=Array.from({length:1000},(_,i)=>card(i%100===0?invented:'/invented-editorial-'+i+'/', 'card-'+i)).join('');
   await send('Page.setDocumentContent',{frameId:frame,html:documentFor(many)});

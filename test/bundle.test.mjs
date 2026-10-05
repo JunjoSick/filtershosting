@@ -22,6 +22,7 @@ const rules = (content) => content.split(/\r?\n/).filter((line) => line && !line
 async function fixture(t, { mockClock = true } = {}) {
   const root = await mkdtemp(path.join(tmpdir(), 'filter-bundle-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
+  await mkdir(path.join(root, 'sources/filters'), { recursive: true });
   await Promise.all(SOURCES.map((file) => copyFile(path.join(repo, file), path.join(root, file))));
   if (mockClock) t.mock.timers.enable({ apis: ['Date'], now: START });
   return root;

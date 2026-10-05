@@ -6,8 +6,11 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { BUNDLE, HISTORY, PATCHES, SOURCES, buildBundle, readArtifacts, verifyHistoryExtension } from '../tools/bundle.mjs';
+import { PUBLIC_FILES, buildPublicFiles } from '../tools/public-files.mjs';
+import { BUNDLE, HISTORY, PATCHES, SOURCES, buildBundle as buildBundleOnly, readArtifacts, verifyHistoryExtension } from '../tools/bundle.mjs';
 import { reconcile, runCommand } from '../tools/publish.mjs';
+
+async function buildBundle(root) { await buildPublicFiles(root); return buildBundleOnly(root); }
 
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const git = (cwd, ...args) => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
@@ -19,10 +22,11 @@ async function fixture(t) {
   const remote = path.join(root, 'remote.git');
   const runner = path.join(root, 'runner');
   await mkdir(seed);
-  for (const file of [...SOURCES, BUNDLE, HISTORY, PATCHES, 'tools', '.gitignore', 'package.json', 'package-lock.json']) {
+  for (const file of ['sources', ...Object.keys(PUBLIC_FILES), BUNDLE, HISTORY, PATCHES, 'tools', '.gitignore', 'package.json', 'package-lock.json']) {
     await cp(path.join(repo, file), path.join(seed, file), { recursive: true });
   }
-  await writeFile(path.join(seed, 'bundle-automation.json'), '{"enabled":true}\n');
+  await mkdir(path.join(seed, 'config'));
+  await writeFile(path.join(seed, 'config/bundle-automation.json'), '{"enabled":true}\n');
   // The real publisher invokes npm test from each fresh checkout. The fixture
   // suite is small to avoid recursively running this orchestration suite.
   await mkdir(path.join(seed, 'test'));
@@ -77,6 +81,7 @@ assert.equal(process.env.GITHUB_TOKEN, undefined);
     sync();
     cpSync(path.join(repo, 'node_modules'), path.join(seed, 'node_modules'), { recursive: true });
     runCommand('node', ['tools/bundle.mjs', 'check'], { cwd: seed });
+    runCommand('node', ['tools/public-files.mjs', 'check'], { cwd: seed });
     verifyHistoryExtension(before, await readArtifacts(seed));
     assert.equal(git(runner, 'status', '--porcelain'), '');
     assert.equal(git(runner, 'worktree', 'list', '--porcelain').match(/^worktree /gm).length, 1);
@@ -86,7 +91,7 @@ assert.equal(process.env.GITHUB_TOKEN, undefined);
 
 function isPush(command, args) { return command === 'git' && args.includes('push'); }
 function isFetch(command, args) { return command === 'git' && args.includes('fetch'); }
-const builds = (f) => f.calls.filter(({ command, args }) => command === 'node' && args[1] === 'build');
+const builds = (f) => f.calls.filter(({ command, args }) => command === 'node' && args[0] === 'tools/bundle.mjs' && args[1] === 'build');
 
 test('reconciliation fetches latest main, commits coherent artifacts, then stays byte-stable', async (t) => {
   const f = await fixture(t);
@@ -98,15 +103,28 @@ test('reconciliation fetches latest main, commits coherent artifacts, then stays
   assert.equal(git(f.remote, 'rev-parse', 'main^'), sourceHead);
   const names = git(f.remote, 'diff', '--name-only', 'main^', 'main').split('\n');
   assert.ok(names.includes(BUNDLE));
+  assert.ok(names.includes('fuckquiantella.txt'));
   assert.ok(names.includes(`${HISTORY}/manifest.json`));
   assert.ok(names.some((name) => name.startsWith(`${PATCHES}/`)));
-  assert.ok(names.every((name) => name === BUNDLE || name.startsWith(`${HISTORY}/`) || name.startsWith(`${PATCHES}/`)));
+  assert.ok(names.every((name) => Object.hasOwn(PUBLIC_FILES, name) || name === BUNDLE || name.startsWith(`${HISTORY}/`) || name.startsWith(`${PATCHES}/`)));
   const published = f.head();
   assert.equal((await f.publish()).status, 'current');
   assert.equal(f.head(), published);
   assert.equal(git(f.remote, 'show', `main:${SOURCES[0]}`), git(f.remote, 'show', `${sourceHead}:${SOURCES[0]}`));
   assert.ok(f.calls.filter(({ args }) => args.includes('push')).every(({ args }) => !args.some((arg) => /force|rebase/.test(arg))));
   await f.verify();
+});
+
+test('YouTube and userscript source updates publish copies without changing bundle history', async (t) => {
+  const f = await fixture(t);
+  const before = await readArtifacts(f.seed);
+  await f.change(PUBLIC_FILES['kebablastazione.txt'], '\nyoutube.com##.test-copy-update\n', { append: true });
+  await f.change(PUBLIC_FILES['quiantella-adblocker.user.js'], '\n// Test-only userscript update\n', { append: true });
+  assert.equal((await f.publish()).status, 'published');
+  assert.deepEqual(git(f.remote, 'diff', '--name-only', 'main^', 'main').split('\n').sort(),
+    ['kebablastazione.txt', 'quiantella-adblocker.user.js']);
+  await f.verify();
+  assert.deepEqual(await readArtifacts(f.seed), before);
 });
 
 test('actual rejected push triggers a fresh rebuild including another writer, with no second event', async (t) => {
@@ -142,6 +160,7 @@ test('another publisher winning the race keeps its history; rejected candidate i
   await f.source('shared-change');
   f.sync();
   cpSync(path.join(repo, 'node_modules'), path.join(f.seed, 'node_modules'), { recursive: true });
+  runCommand('node', ['tools/public-files.mjs', 'build'], { cwd: f.seed });
   runCommand('node', ['tools/bundle.mjs', 'build'], { cwd: f.seed });
   runCommand('node', ['tools/automation.mjs', 'commit'], { cwd: f.seed });
   const winner = git(f.seed, 'rev-parse', 'HEAD');
@@ -198,15 +217,15 @@ test('lost response after an accepted final push is verified without a duplicate
 test('disabled latest main stops a stale enabled checkout and a retry after conflict', async (t) => {
   const f = await fixture(t);
   await f.source('not-published');
-  await f.change('bundle-automation.json', '{"enabled":false}\n');
+  await f.change('config/bundle-automation.json', '{"enabled":false}\n');
   const disabledHead = f.head();
   assert.equal((await f.publish()).status, 'disabled');
   assert.equal(f.head(), disabledHead);
   assert.equal(builds(f).length, 0);
-  await f.change('bundle-automation.json', '{"enabled":true}\n');
+  await f.change('config/bundle-automation.json', '{"enabled":true}\n');
   f.sync();
-  await writeFile(path.join(f.seed, 'bundle-automation.json'), '{"enabled":false}\n');
-  git(f.seed, 'add', 'bundle-automation.json');
+  await writeFile(path.join(f.seed, 'config/bundle-automation.json'), '{"enabled":false}\n');
+  git(f.seed, 'add', 'config/bundle-automation.json');
   git(f.seed, 'commit', '-m', 'Disable while a publisher builds');
   const result = await f.publish({ run(command, args, options) {
     if (isPush(command, args)) git(f.seed, 'push', 'origin', 'HEAD:refs/heads/main');
@@ -229,7 +248,7 @@ test('fresh rebuild loads updated tools from main after a conflict', async (t) =
   const result = await f.publish({ run(command, args, options) {
     if (isPush(command, args) && ++pushes === 1) git(f.seed, 'push', 'origin', 'HEAD:refs/heads/main');
     const output = f.run(command, args, options);
-    if (command === 'node' && args[1] === 'build') outputs.push(output);
+    if (command === 'node' && args[0] === 'tools/bundle.mjs' && args[1] === 'build') outputs.push(output);
     return output;
   } });
   assert.equal(result.attempt, 2);

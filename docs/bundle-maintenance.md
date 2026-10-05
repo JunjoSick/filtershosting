@@ -3,16 +3,17 @@
 The bundle contains, in order, `fuckquiantella.txt`,
 `fuckgazzettinodelchianti.txt`, `fuckdaicollifiorentini.txt`, and
 `fuckfirenzedintorni.txt`. The allowlist is explicit in `tools/bundle.mjs`.
-YouTube and the userscript are excluded. The original files remain the source
-of truth and keep their existing subscription URLs.
+YouTube and the userscript are excluded from the bundle. Editable files now
+live under `sources/filters/` and `sources/userscripts/`; generated root copies
+keep the existing subscription URLs. See [repository layout](repository-layout.md).
 
 ## Make an update
 
-The draft includes automatic generation and an **inactive automatic publisher**.
-`bundle-automation.json` contains `"enabled": false`; no job with write
-permissions runs while that flag is false. CI generates a candidate on every
-PR, but in this disabled mode it requires the generated outputs to be committed
-before merging. The manual procedure below remains available as a fallback.
+Automatic generation and publishing are controlled by
+`config/bundle-automation.json`. Read its current `enabled` value; the layout
+change preserves it. No job with write permissions runs while that flag is false.
+CI generates a candidate on every PR. If publishing is disabled, it requires
+the generated outputs to be committed before merging. The manual procedure below remains available as a fallback.
 
 Use Node.js 24 (22 or newer is supported) and the Unix `diff` utility:
 
@@ -26,15 +27,16 @@ node tools/bundle.mjs history-check origin/main
 git -c core.whitespace=cr-at-eol diff --check
 ```
 
-With automation disabled, commit the source change, `fuckquotidianilocali.txt`,
-`diffs/`, and `history/` together. Review and merge that commit normally.
-No workflow currently writes to a branch or changes repository settings.
+With automation disabled, commit the source change, generated root copies,
+`fuckquotidianilocali.txt`, `diffs/`, and `history/` together. Review and merge that commit normally.
+The publisher writes generated artifacts only while enabled. It does not change
+repository settings.
 A draft PR does not activate the `/main/` subscription.
 
-## Proposed automatic publishing (disabled)
+## Automatic publishing
 
 After explicit approval to activate publishing, change the single tracked flag
-in `bundle-automation.json` to `true` in a reviewed commit on `main`. No PAT,
+in `config/bundle-automation.json` to `true` in a reviewed commit on `main`. No PAT,
 GitHub App, secret, repository variable, branch-rule exemption, or repository
 permission setting is required or configured by this proposal.
 
@@ -45,9 +47,9 @@ With the flag enabled:
    Committing generated files manually is no longer required.
 2. Pushes to `main`, a manual `workflow_dispatch`, and an hourly catch-up at
    minute 17 UTC use the same publisher. Its write job runs only when the flag
-   read from `main` is true. Source changes can reach the individual lists
-   before the bundle; each bundle revision, snapshot, manifest and patch chain
-   is committed together.
+   read from `main` is true. Standalone public copies and each bundle revision,
+   snapshot, manifest and patch chain are generated and committed together
+   from `sources/`.
 3. The publisher makes at most three publication attempts, with 5- and
    10-second backoffs. **Every attempt fetches current main, creates a new
    detached worktree, rereads the flag, installs its locked dependencies, and

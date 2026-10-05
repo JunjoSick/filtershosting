@@ -33,7 +33,7 @@ jobs:
           node-version: '24'
       - id: config
         run: |
-          enabled=$(node -e 'const c = require("./article-cards-automation.json"); if (typeof c.enabled !== "boolean") process.exit(1); console.log(c.enabled);')
+          enabled=$(node -e 'const c = require("./config/article-cards-automation.json"); if (typeof c.enabled !== "boolean") process.exit(1); console.log(c.enabled);')
           echo "enabled=$enabled" >> "$GITHUB_OUTPUT"
 
   publish:
