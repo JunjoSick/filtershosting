@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         fucksponsors
 // @namespace    https://github.com/JunjoSick/filtershosting
-// @version      1.0.4
+// @version      1.0.5
 // @description  Articoli sponsorizzati e promozionali.
 // @match        https://www.quiantella.it/*
 // @match        https://quiantella.it/*
@@ -24,7 +24,7 @@
   'use strict';
   // Exact digest transitions must be separately reviewed with all removed
   // paths. Only the approved 40-to-32 Colli release transition is pinned.
-  const CONFIG = /*__CONFIG__*/ { registryBase: 'https://raw.githubusercontent.com/JunjoSick/filtershosting/main/article-cards/registries', version: '1.0.4', reviewedRemovals: [{"host":"daicollifiorentini.it","fromSnapshot":"812e243fd27aa25f597c3328fdb911a6f2e89e765df5c0f219e201b323230083","toSnapshot":"b18b892ea2a1ae324390ee9c0cd389671826a250888d1d1602acb3768a020be1","reviewId":"fucksponsors-release-2026-10-05"}], debug: false };
+  const CONFIG = /*__CONFIG__*/ { registryBase: 'https://raw.githubusercontent.com/JunjoSick/filtershosting/main/article-cards/registries', version: '1.0.5', reviewedRemovals: [{"host":"daicollifiorentini.it","fromSnapshot":"812e243fd27aa25f597c3328fdb911a6f2e89e765df5c0f219e201b323230083","toSnapshot":"b18b892ea2a1ae324390ee9c0cd389671826a250888d1d1602acb3768a020be1","reviewId":"fucksponsors-release-2026-10-05","removedPaths":["/cef-di-giacomo-bandinelli-cambia-i-tuoi-infissi-a-meta-prezzo/","/deliburger-guarda-oltre-tra-aperitivi-pre-tuscany-hall-e-novita-ecco-il-burger-delibeyond/","/eventi-deliburger-e-tuscany-hall-fatti-un-deliape-e-goditi-lo-show-di-angelo-pintusdeliburger/","/lo-street-food-holle-market-si-trasferisce-su-glovo-i-prodotti-direttamente-a-domicilio/","/novita-il-favoloso-panettone-artigianale-di-marco-manzi-al-deliburger-anche-domicilio/","/ore-2045-fiorentina-vs-milan-prima-dello-stadio-al-deliburger/","/studio-alfa-omega-di-antella-integra-team-e-servizi/","/svuotatutto-allholle-market-promo-birra-e-dj-v-per-finire-in/"]}], debug: false };
   const DAY = 86400000;
   const RETRY = 3600000;
   const MARK = 'data-local-article-card';
@@ -284,9 +284,24 @@
     return CONFIG.reviewedRemovals.some(r => r.host === host && r.fromSnapshot === snapshot && r.toSnapshot === data.snapshot && typeof r.reviewId === 'string' && r.reviewId.trim());
   }
 
-  async function adoptCache() {
+  // Reconstruct only one explicitly reviewed cached snapshot, never a chain.
+  // This lets an offline draft client skip the intermediate server release.
+  async function readCachedRegistry() {
     const cached = await get(key, null);
     const set = await verifiedRegistry(cached?.data);
+    if (!set) return { cached, set };
+    const review = CONFIG.reviewedRemovals.find(r => r.host === host && r.fromSnapshot === cached.data.snapshot && typeof r.reviewId === 'string' && r.reviewId.trim() && Array.isArray(r.removedPaths) && r.removedPaths.length);
+    if (!review) return { cached, set };
+    const removed = new Set(review.removedPaths);
+    if (removed.size !== review.removedPaths.length || [...removed].some(p => !set.has(p))) return { cached, set };
+    const data = { ...cached.data, paths: cached.data.paths.filter(p => !removed.has(p)), snapshot: review.toSnapshot };
+    const migrated = await verifiedRegistry(data);
+    if (!migrated) return { cached, set };
+    return { cached: { data, checkedAt: 0 }, set: migrated, migrated: true };
+  }
+
+  async function adoptCache() {
+    const { cached, set } = await readCachedRegistry();
     if (set && allowedReplacement(cached.data, set)) replaceRegistry(cached.data, set);
     return cached;
   }
@@ -304,16 +319,17 @@
 
   async function fetchRegistry() {
     if (stopped || document.hidden || refreshing) return;
-    if (navigator.onLine === false || navigator.connection?.saveData) { armRefresh(RETRY); return; }
     refreshing = true;
     try {
       const now = Date.now();
-      const current = await get(key, null);
-      const currentSet = await verifiedRegistry(current?.data);
+      const { cached: current, set: currentSet, migrated } = await readCachedRegistry();
       if (currentSet && allowedReplacement(current.data, currentSet)) {
         replaceRegistry(current.data, currentSet);
+        // Persist under the existing refresh lock; startup performs no writes.
+        if (migrated) await put(key, current);
         if (Number.isFinite(current.checkedAt) && current.checkedAt <= now && now - current.checkedAt < DAY) { armRefresh(DAY - (now - current.checkedAt) + 1000); return; }
       }
+      if (navigator.onLine === false || navigator.connection?.saveData) { armRefresh(RETRY); return; }
       const attempt = await get(key + ':attempt', 0);
       if (Number.isFinite(attempt) && attempt <= now && now - attempt < RETRY) { armRefresh(RETRY - (now - attempt) + 1000); return; }
       if (stopped || document.hidden) return;
@@ -383,8 +399,7 @@
   }
 
   async function start() {
-    const cached = await get(key, null);
-    const set = await verifiedRegistry(cached?.data);
+    const { cached, set } = await readCachedRegistry();
     if (stopped) return;
     if (set) { paths = set; snapshot = cached.data.snapshot; }
     const style = document.createElement('style');
