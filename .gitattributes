@@ -5,3 +5,5 @@
 /test/** text eol=lf
 *.json text eol=lf
 *.yml text eol=lf
+/fucksponsors.txt text eol=lf
+/sponsored-article-cards.txt text eol=lf

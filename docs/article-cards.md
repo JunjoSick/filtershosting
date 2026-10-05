@@ -1,4 +1,4 @@
-# Optional sponsored article cards — implementation draft
+# fucksponsors - Articoli sponsorizzati e promozionali
 
 This feature is separate from the four ad lists and their differential bundle.
 The separate optional native-CSS subscription and optional userscript hide selected,
@@ -13,8 +13,11 @@ corrections are separate decisions. The original bundle flag remains as found.
 
 ## Data and generation
 
-`article-cards/baseline/` contains the byte-verified frozen transfer: GDC 1,822,
-QuiAntella 9, Colli 40, Firenze 5. The builder checks its original SHA-256 hashes.
+`article-cards/baseline/` contains the approved release baseline: GDC 1,822,
+QuiAntella 9, Colli 32, Firenze 5. Its 1,868 URLs reconcile exactly to 1,823
+explicit sponsorship records plus 45 human-approved Hide decisions. Eight
+unavailable Colli articles are excluded pending evidence. The original 1,876-URL
+transfer remains in Git history; the builder checks the release SHA-256 hashes.
 No proposed historic additions or Catrame holdouts have been applied. Historical
 paths absent from the baseline cannot be added automatically; this preserves
 historical keeps without publishing a private keep list.
@@ -23,7 +26,7 @@ historical keeps without publishing a private keep list.
 baseline. Canonical percent encoding and trailing slashes are preserved. No
 article bodies, titles, personal review choices, or private review application
 code are stored here. Four compact `article-cards/registries/*.json` files and
-`sponsored-article-cards.txt` are generated deterministically. Registries contain
+`fucksponsors.txt` are generated deterministically. Registries contain
 their path-array SHA-256. Producer and userscript both limit exact paths to 4,096
 characters, 50,000 entries, and 2,000,000 serialized JSON text units including LF.
 Overlength candidates are skipped/count-reported; capacity-limited candidates
@@ -32,7 +35,10 @@ Unchanged content produces identical bytes and no commit.
 
 ## Native subscription and supported layouts
 
-`sponsored-article-cards.txt` contains standard `##` cosmetic rules, with no
+`sponsored-article-cards.txt` remains a generated compatibility alias, with its
+own RAW header and content-derived version. The updater commits both files together.
+
+`fucksponsors.txt` contains standard `##` cosmetic rules, with no
 network blocking or procedural duplicates. It stays outside the original bundle.
 Its content-derived version changes only when generated content changes.
 `tools/article-native-css.mjs` is the active layout/encoding source; the recovered
@@ -58,9 +64,9 @@ reevaluated by the browser when hrefs, base URLs, classes or the DOM change.
 Paths are grouped in batches of 32 to factor repeated layout checks. Each layout keeps its concrete card class as a browser indexing anchor. Each group's
 negative guards still require one shared path identity; combining all paths into
 one permissive negative guard would incorrectly hide mixed-article wrappers.
-The frozen 1,876 paths produce 294 native rules, around 5.19 MB. Encoding is tested
+The approved 1,868 paths produce 292 native rules, around 5.18 MB. Encoding is tested
 through applied full stylesheets, including two different registered paths in one
-card. All original registry entries and personal decisions remain intact.
+card. All approved registry entries and explicit personal decisions remain intact.
 
 | Client | Support/evidence |
 | --- | --- |
@@ -270,8 +276,8 @@ insertion. Wrapperless Firenze search rows remain visible. A full GDC stylesheet
 stress test uses an invented 1,000-card page. The userscript's computed-display
 lifecycle and incremental work are also checked, as are hidden classifier fixtures
 and the 48-case ordinary-markup disclosure matrix.
-Chromium tests explicitly skip when no supported binary exists; this implementation
-environment has Chromium and runs them.
+The Chromium test is mandatory and fails if no supported browser starts.
+Set `CHROME_BIN` to select an installed browser explicitly.
 
 Separate reproducible client checks use the official uBO parser at commit
 `01092d95dbc7d91599a5ad017d5b98aba1118659` with native CSS enabled, and official
@@ -284,5 +290,5 @@ extension or production workflow verification. The rejected real-body fixtures
 were neither retried nor repackaged. New DOM placements have synthetic proof only.
 Browser measurements do not establish mobile performance or paint timing. Reduced
 layout/client coverage, wrapperless-row exclusion and strict discovery evidence
-requirements are documented limits; all 1,876 frozen paths and pending decisions
+requirements are documented limits; all 1,868 approved paths and pending decisions
 remain intact.

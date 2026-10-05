@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { check } from './article-cards.mjs';
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 await check(process.cwd());
-const allowed = ['article-cards/state.json', 'sponsored-article-cards.txt',
+const allowed = ['article-cards/state.json', 'fucksponsors.txt', 'sponsored-article-cards.txt',
   ...['gazzettinodelchianti.it', 'quiantella.it', 'daicollifiorentini.it', 'firenzedintorni.it'].map(h => `article-cards/registries/${h}.json`)];
 const dirty = execFileSync('git', ['status', '--porcelain', '--untracked-files=all'], { encoding: 'utf8' }).split('\n').filter(Boolean);
 if (dirty.some(line => !allowed.includes(line.slice(3)))) throw new Error('Unexpected changes in discovery checkout');

@@ -14,6 +14,7 @@ const record = (site = 'colli', url = '/invented-new/', html = '<p>Articolo ADV<
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'article-cards-test-')); t.after(() => rm(root, { recursive: true, force: true }));
   await cp(path.join(repo, 'article-cards'), path.join(root, 'article-cards'), { recursive: true });
+  await cp(path.join(repo, 'fucksponsors.txt'), path.join(root, 'fucksponsors.txt'));
   await cp(path.join(repo, 'sponsored-article-cards.txt'), path.join(root, 'sponsored-article-cards.txt'));
   return root;
 }

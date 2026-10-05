@@ -12,7 +12,7 @@ const isPush = (c, a) => c === 'git' && a.includes('push');
 async function fixture(t, enabled = true) {
   const root = await mkdtemp(path.join(tmpdir(), 'article-publish-')); t.after(() => rm(root, { recursive: true, force: true }));
   const seed = path.join(root, 'seed'); const remote = path.join(root, 'remote.git'); const runner = path.join(root, 'runner'); await mkdir(seed);
-  for (const f of ['article-cards','tools','sponsored-article-cards.txt','package.json','package-lock.json','.gitignore']) await cp(path.join(repo, f), path.join(seed, f), { recursive: true });
+  for (const f of ['article-cards','tools','fucksponsors.txt','sponsored-article-cards.txt','package.json','package-lock.json','.gitignore']) await cp(path.join(repo, f), path.join(seed, f), { recursive: true });
   await writeFile(path.join(seed, 'article-cards-automation.json'), JSON.stringify({ enabled }) + '\n');
   // Only transport is synthetic. Execute the production discovery CLI,
   // report file, exit policy, commit guard and publisher unchanged.
@@ -53,7 +53,7 @@ test('new publisher gate is disabled without installing or generating anything',
 });
 test('atomic publication modifies only article outputs and a second run is a byte-stable no-op',async t=>{
   const f=await fixture(t); const first=await f.publish(); assert.equal(first.status,'published'); assert.equal(first.partial,true); assert.equal(first.report.colli.status,'complete'); assert.equal(first.report.firenze.status,'failed'); const before=f.head();
-  const files=git(f.remote,'diff','--name-only','main^','main').split('\n'); assert.deepEqual(files.sort(),['article-cards/registries/daicollifiorentini.it.json','article-cards/state.json','sponsored-article-cards.txt']);
+  const files=git(f.remote,'diff','--name-only','main^','main').split('\n'); assert.deepEqual(files.sort(),['article-cards/registries/daicollifiorentini.it.json','article-cards/state.json','fucksponsors.txt','sponsored-article-cards.txt']);
   const next=await f.publish();assert.equal(next.status,'current');assert.equal(next.partial,true); assert.equal(f.head(),before); f.clean();
 });
 test('actual publisher rejects ambiguous RSS dates and cannot commit the invented path', async t => {

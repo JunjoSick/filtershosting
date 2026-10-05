@@ -1,8 +1,8 @@
 ! Title: fucksponsors
-! Version: 5e9bc4db7788e387
+! Version: 9dee421c4fd52e0d
 ! Description: Articoli sponsorizzati e promozionali
 ! Expires: 1 day
-! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/sponsored-article-cards.txt
+! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fucksponsors.txt
 ! Requires native :has(): modern uBO or AdGuard. See docs/article-cards.md for client limits.
 ! No procedural fallback rules or network blocking. Do not use with older ExtendedCss-only clients.
 ! Exact canonical/root-relative hrefs only; mixed-link cards and wrapperless Firenze search rows stay visible.

@@ -8,7 +8,7 @@ import { testNativeStyles } from './support/article-native-browser.mjs';
 import { launchBrowser } from './support/browser-launch.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 test('applied native subscription, ExtendedCss negative control and userscript lifecycle', async t => {
-  const text = (await outputs(root)).get('sponsored-article-cards.txt');
+  const text = (await outputs(root)).get('fucksponsors.txt');
   const library = await readFile(path.join(root, 'node_modules/@adguard/extended-css/dist/extended-css.js'), 'utf8');
   const legacy = JSON.parse(await readFile(new URL('./fixtures/article-legacy-extended-rule.json', import.meta.url), 'utf8')).rule.split('#?#')[1];
   const p = JSON.parse(await readFile(path.join(root, 'article-cards/registries/gazzettinodelchianti.it.json'), 'utf8')).paths[0];

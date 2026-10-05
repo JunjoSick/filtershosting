@@ -14,8 +14,8 @@ export const SITES = {
   colli: 'https://daicollifiorentini.it',
   firenze: 'https://www.firenzedintorni.it',
 };
-export const BASELINE_COUNTS = { gdc: 1822, quiantella: 9, colli: 40, firenze: 5 };
-const baselineHashes = { gdc: '861df8fdf7c06bc128f32c3e589889efa566e30a32e82b4a8e34ecd647e3baf0', quiantella: '815b55e4433231052c6d0cf0ffb2d84accb8a8f8345127a2c4308698503b6d5a', colli: 'f327e709b958edd99340313dda83dcba66e7355b7eb3c437aeec96bbddb05142', firenze: 'fe707ee3b4237c117b9207df9c65c81943661374f45e4d64b6f5f2a6218bc7a0' };
+export const BASELINE_COUNTS = { gdc: 1822, quiantella: 9, colli: 32, firenze: 5 };
+const baselineHashes = { gdc: '861df8fdf7c06bc128f32c3e589889efa566e30a32e82b4a8e34ecd647e3baf0', quiantella: '815b55e4433231052c6d0cf0ffb2d84accb8a8f8345127a2c4308698503b6d5a', colli: 'c15ab6e6d8b9dd479ed5d6b43afabc9664ccc0230b37d25c6e76ac58236b9c92', firenze: 'fe707ee3b4237c117b9207df9c65c81943661374f45e4d64b6f5f2a6218bc7a0' };
 const json = value => JSON.stringify(value) + '\n';
 const hash = value => createHash('sha256').update(value).digest('hex');
 const host = site => new URL(SITES[site]).hostname.replace(/^www\./, '');
@@ -68,13 +68,17 @@ export async function outputs(root, state) {
     registries[r.host] = r;
     result.set(`article-cards/registries/${r.host}.json`, json(r));
   }
-  const lines = ['! Title: Optional sponsored article cards (native CSS)', '! Version: pending', '! Expires: 1 day', '! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/sponsored-article-cards.txt', '! Requires native :has(): modern uBO or AdGuard. See docs/article-cards.md for client limits.', '! No procedural fallback rules or network blocking. Do not use with older ExtendedCss-only clients.', '! Exact canonical/root-relative hrefs only; mixed-link cards and wrapperless Firenze search rows stay visible.'];
+  const lines = ['! Title: fucksponsors', '! Version: pending', '! Description: Articoli sponsorizzati e promozionali', '! Expires: 1 day', '! RAW: https://raw.githubusercontent.com/JunjoSick/filtershosting/main/fucksponsors.txt', '! Requires native :has(): modern uBO or AdGuard. See docs/article-cards.md for client limits.', '! No procedural fallback rules or network blocking. Do not use with older ExtendedCss-only clients.', '! Exact canonical/root-relative hrefs only; mixed-link cards and wrapperless Firenze search rows stay visible.'];
   for (const [site, origin] of Object.entries(SITES)) {
     const r = registries[host(site)];
     lines.push(`! ${r.host}: ${r.paths.length} registered paths; snapshot ${r.snapshot}`, ...nativeRules(site, origin, r.paths));
   }
   lines[1] = '! Version: ' + hash([...lines.slice(0, 1), ...lines.slice(2)].join('\n') + '\n').slice(0, 16);
-  result.set('sponsored-article-cards.txt', lines.join('\n') + '\n');
+  result.set('fucksponsors.txt', lines.join('\n') + '\n');
+  // Preserve the draft URL as a generated compatibility alias.
+  const legacy = lines.map(line => line.replace('main/fucksponsors.txt', 'main/sponsored-article-cards.txt'));
+  legacy[1] = '! Version: ' + hash([...legacy.slice(0, 1), ...legacy.slice(2)].join('\n') + '\n').slice(0, 16);
+  result.set('sponsored-article-cards.txt', legacy.join('\n') + '\n');
   return result;
 }
 async function atomicWrite(root, name, content) {

@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Optional sponsored article cards (harsh)
+// @name         fucksponsors
 // @namespace    https://github.com/JunjoSick/filtershosting
-// @version      1.0.3
-// @description  Optional local exact-path card filtering; no article requests.
+// @version      1.0.4
+// @description  Articoli sponsorizzati e promozionali.
 // @match        https://www.quiantella.it/*
 // @match        https://quiantella.it/*
 // @match        https://www.gazzettinodelchianti.it/*
