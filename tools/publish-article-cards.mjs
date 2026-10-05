@@ -53,7 +53,7 @@ export async function reconcile(root, {
       checkout = path.join(temporary, 'checkout');
       git(root, 'worktree', 'add', '--detach', checkout, base);
       attached = true;
-      const config = JSON.parse(await readFile(path.join(checkout, 'article-cards-automation.json'), 'utf8'));
+      const config = JSON.parse(await readFile(path.join(checkout, 'config/article-cards-automation.json'), 'utf8'));
       if (typeof config.enabled !== 'boolean') throw new Error('Automation flag must be a boolean');
       if (!config.enabled) return { status: 'disabled', head: base, attempt };
       log(`${verifyOnly ? 'Final verification' : `Attempt ${attempt}/${maxAttempts}`} from main ${base}`);

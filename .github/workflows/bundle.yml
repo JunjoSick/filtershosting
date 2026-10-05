@@ -31,7 +31,7 @@ jobs:
       - name: Verify required browser executable
         run: '"$CHROME_BIN" --version'
       - run: npm test
-      - name: Generate candidate bundle automatically
+      - name: Generate public copies and candidate bundle
         run: npm run build
       - run: npm run check
       - name: Preserve published snapshots and patch history

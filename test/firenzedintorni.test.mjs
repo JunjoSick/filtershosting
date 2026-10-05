@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
-const source = readFileSync(new URL('../fuckfirenzedintorni.txt', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../sources/filters/fuckfirenzedintorni.txt', import.meta.url), 'utf8');
 const bundle = readFileSync(new URL('../fuckquotidianilocali.txt', import.meta.url), 'utf8');
 const marker = '! ---- fuckfirenzedintorni.txt ----';
 assert.equal(bundle.split(marker).length, 2, 'bundle must contain one Firenze section');

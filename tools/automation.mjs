@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { PUBLIC_FILES, checkPublicFiles } from './public-files.mjs';
 import { BUNDLE, HISTORY, PATCHES, checkBundle, checkHistoryAgainstGit } from './bundle.mjs';
 
 function git(root, ...args) {
@@ -9,8 +10,8 @@ function git(root, ...args) {
 }
 
 export async function automationEnabled(root) {
-  const config = JSON.parse(await readFile(path.join(root, 'bundle-automation.json'), 'utf8'));
-  if (typeof config.enabled !== 'boolean') throw new Error('bundle-automation.json enabled must be a boolean');
+  const config = JSON.parse(await readFile(path.join(root, 'config/bundle-automation.json'), 'utf8'));
+  if (typeof config.enabled !== 'boolean') throw new Error('config/bundle-automation.json enabled must be a boolean');
   return config.enabled;
 }
 
@@ -19,7 +20,7 @@ export function generatedChanges(root) {
   const untracked = git(root, 'ls-files', '--others', '--exclude-standard', '-z');
   const files = [...new Set(`${tracked}${untracked}`.split('\0').filter(Boolean))];
   for (const file of files) {
-    if (file !== BUNDLE && !file.startsWith(`${HISTORY}/`) && !file.startsWith(`${PATCHES}/`)) {
+    if (!Object.hasOwn(PUBLIC_FILES, file) && file !== BUNDLE && !file.startsWith(`${HISTORY}/`) && !file.startsWith(`${PATCHES}/`)) {
       throw new Error(`Refusing unexpected build output: ${file}`);
     }
   }
@@ -38,11 +39,12 @@ export async function checkCiOutputs(root) {
 // ordinary fast-forward-only push; a failed candidate must never be rebased.
 export async function preparePublicationCommit(root) {
   if (!(await automationEnabled(root))) throw new Error('Automatic publishing is disabled');
+  await checkPublicFiles(root);
   await checkBundle(root);
   await checkHistoryAgainstGit(root, 'HEAD');
   const files = generatedChanges(root);
   if (!files.length) return false;
-  git(root, 'add', '--', BUNDLE, HISTORY, PATCHES);
+  git(root, 'add', '--', ...Object.keys(PUBLIC_FILES), BUNDLE, HISTORY, PATCHES);
   git(root, '-c', 'user.name=github-actions[bot]', '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com',
     'commit', '-m', 'Update fuckquotidianilocali bundle');
   return true;

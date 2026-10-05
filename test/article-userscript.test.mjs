@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { JSDOM } from 'jsdom';
 import { createHash, webcrypto } from 'node:crypto';
 const digest = paths => createHash('sha256').update(JSON.stringify(paths) + '\n').digest('hex');
-const source = await readFile(new URL('../article-cards.user.js', import.meta.url), 'utf8');
+const source = await readFile(new URL('../sources/userscripts/article-cards.user.js', import.meta.url), 'utf8');
 const blocked = '/invented-sponsored/'; const mark = '[data-local-article-card]';
 const card = (href = blocked, kind = 'td_module_flex td_module_wrap td-cpt-post') => `<div class="${kind}"><div class="td-module-container"><div class="td-module-meta-info"><h3 class="td-module-title"><a href="${href}">Invented title</a></h3></div></div></div>`;
 const row = (p, second = p) => `<h2 class="mb-0"><a href="${p}">Title</a></h2><p class="mb-0">Summary</p><p><a href="${second}">URL</a></p><hr>`;

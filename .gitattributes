@@ -7,3 +7,14 @@
 *.yml text eol=lf
 /fucksponsors.txt text eol=lf
 /sponsored-article-cards.txt text eol=lf
+
+# Preserve the exact published bytes of standalone subscriptions and userscript.
+/sources/filters/** -text
+/sources/userscripts/** -text
+/fuckquiantella.txt -text
+/fuckgazzettinodelchianti.txt -text
+/fuckdaicollifiorentini.txt -text
+/fuckfirenzedintorni.txt -text
+/kebablastazione.txt -text
+/quiantella-adblocker.user.js -text
+/article-cards.user.js -text
