@@ -179,6 +179,26 @@ After safely reconciling complete sites, the publisher marks partial discovery
 with exit status 2 and a job summary. A repeated partial run remains a byte-stable
 no-op. This keeps failures visible without indefinitely blocking unrelated sites.
 
+Disclosure holds now report the evidence condition instead of calling every
+recent non-blocked article `ambiguous-disclosure`:
+
+| Reason | Meaning (all remain visible) |
+| --- | --- |
+| `no-supported-disclosure` | No standalone or terminal-BR approved label in a supported candidate element; this does not certify editorial status or absence of payment |
+| `document-active-content` | The whole-fragment active-element/event-handler veto fired, whether or not a disclosure is also present |
+| `unsupported-disclosure-context` | A candidate label matched but its subtree or ancestor context failed the existing plain, attribute-free contract |
+| `unsafe-disclosure-tail` | A candidate label passed its own context checks but following content was too long or structurally unsupported |
+
+The bounded parser, early active-content veto, worker failures/work limits,
+timestamp cutoff, conflicts, and publication gates are unchanged. Diagnostics
+identify one encountered blocker, not every possible blocker. A later independently
+valid label still qualifies under the same rules. Missing/unsupported bodies and
+sites report `unreadable-content`/`unsupported-disclosure-site`; parse exceptions
+continue to report `unreadable-content`. Reports still contain only path and reason,
+not copied bodies or a permanent editorial allowlist. See the
+[October 8 queue review](reviews/2026-10-08-disclosures.md) for all 77 candidates
+and the separate recommendations based on publisher disclosures.
+
 The maximum 17 requests, each with two 15-second attempts and a one-second retry
 delay, require at most 527 seconds of request time. Discovery also has a global
 540-second abort deadline, including response-body reads; its child process has

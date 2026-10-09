@@ -32,6 +32,72 @@ test('standalone and terminal BR disclosures, including short PRE, are accepted'
   assert.equal(classify('quiantella', '<p>Informazione promozionale</p>'), 'block');
   for (const label of ['Articolo ADV', 'Contenuto adv', '#adv']) assert.equal(classify('colli', `<p>${label}</p>`), 'block');
 });
+test('review diagnostics survive the worker without relaxing disclosure evidence', async t => {
+  const worker = new DisclosureClassifier(); t.after(() => worker.close());
+  const label = '<p>CONTENUTO SPONSORIZZATO</p>';
+  const cases = [
+    ['<p>Ordinary local news.</p>', 'no-supported-disclosure'],
+    ['<p>INFORMAZIONE PUBBLICITARIA</p>', 'no-supported-disclosure'],
+    ['<p>Discussing CONTENUTO SPONSORIZZATO.</p>', 'no-supported-disclosure'],
+    ['<h2>CONTENUTO SPONSORIZZATO</h2>', 'no-supported-disclosure'],
+    ['<p hidden>CONTENUTO SPONSORIZZATO</p>', 'unsupported-disclosure-context'],
+    ['<div class="unknown">' + label + '</div>', 'unsupported-disclosure-context'],
+    ['<blockquote>' + label + '</blockquote>', 'unsupported-disclosure-context'],
+    [label + '<p>' + 'x'.repeat(600) + '</p>', 'unsafe-disclosure-tail'],
+    [label + '<figure><img src="invented.png"></figure>', 'unsafe-disclosure-tail'],
+    ['<style>p{display:none}</style>' + label, 'document-active-content'],
+    ['<img ONERROR="hideLabel()">' + label, 'document-active-content'],
+    ['<iframe src="about:blank"></iframe><p>Ordinary news.</p>', 'document-active-content'],
+  ];
+  for (const [html, reason] of cases) {
+    const metrics = {};
+    assert.equal(classify('gdc', html, { metrics }), 'review', html);
+    assert.equal(metrics.reason, reason, html);
+    const result = await worker.classify('gdc', html);
+    assert.equal(result.decision, 'review', html); assert.equal(result.reason, reason, html);
+  }
+  // A rejected earlier label cannot veto a later independently valid one.
+  const metrics = { reason: 'stale', limited: 'stale' };
+  assert.equal(classify('gdc', '<p hidden>CONTENUTO SPONSORIZZATO</p>' + label, { metrics }), 'block');
+  assert.equal(metrics.reason, undefined); assert.equal(metrics.limited, undefined);
+  assert.equal(classify('gdc', label + '<p>' + 'x'.repeat(599) + '</p>'), 'block');
+  assert.equal((await worker.classify('gdc', label)).reason, undefined);
+});
+test('discovery logs explain held evidence without publishing it', async t => {
+  const root = await fixture(t);
+  const bodies = [
+    '<p>Ordinary local news.</p>',
+    '<p hidden>Articolo ADV</p>',
+    '<p>Articolo ADV</p><p>' + 'x'.repeat(600) + '</p>',
+    '<script>/* invented active content */</script><p>Articolo ADV</p>',
+  ];
+  const names = ['article-cards/state.json', 'fucksponsors.txt', 'sponsored-article-cards.txt', ...Object.keys((await load(root)).sites).map(site => `article-cards/baseline/${site}.json`), ...['gazzettinodelchianti.it', 'quiantella.it', 'daicollifiorentini.it', 'firenzedintorni.it'].map(host => `article-cards/registries/${host}.json`)];
+  const before = await Promise.all(names.map(name => readFile(path.join(root, name))));
+  let logged;
+  const report = await discover(root, { now: Date.parse('2026-10-02T12:00Z'), log: value => { logged = JSON.parse(value); }, get: async u => {
+    if (u.startsWith('https://daicollifiorentini.it')) return response(bodies.map((html, i) => record('colli', `/invented-held-${i}/`, html)));
+    throw Error('invented offline');
+  } });
+  assert.equal(report.colli.added, 0);
+  assert.deepEqual(report.colli.review.map(r => r.reason), ['no-supported-disclosure', 'unsupported-disclosure-context', 'unsafe-disclosure-tail', 'document-active-content']);
+  assert.deepEqual(logged, report);
+  for (const row of report.colli.review) assert.deepEqual(Object.keys(row).sort(), ['path', 'reason']);
+  for (const [i, name] of names.entries()) assert.deepEqual(await readFile(path.join(root, name)), before[i], name);
+});
+test('invented RSS gallery, styled PRE and linked attribution each retain their evidence guard', () => {
+  // Reproduce the observed structures using invented text/URLs, not live bodies.
+  const label = '<pre style="text-align: right;"><strong>(CONTENUTO SPONSORIZZATO)</strong></pre>';
+  const plain = '<pre><strong>(CONTENUTO SPONSORIZZATO)</strong></pre>';
+  const footer = '<p>Invented article <a href="https://example.invalid/story/">Story</a> from <a href="https://example.invalid/">Publisher</a>.</p>';
+  for (const [html, reason] of [
+    ['<style type="text/css">.invented-gallery { color: black }</style><div>Gallery</div>' + label + footer, 'document-active-content'],
+    [label + footer, 'unsupported-disclosure-context'],
+    [plain + footer, 'unsafe-disclosure-tail'],
+  ]) {
+    const metrics = {}; assert.equal(classify('gdc', html, { metrics }), 'review'); assert.equal(metrics.reason, reason);
+  }
+  assert.equal(classify('gdc', plain + '<p>Short attribution</p>'), 'block');
+});
 test('incidental, hidden, code, quote, widget, nonterminal, and ancestor-tail examples fail open', () => {
   for (const html of ['<p>Discussing CONTENUTO SPONSORIZZATO.</p>', '<script>CONTENUTO SPONSORIZZATO</script>', '<style>CONTENUTO SPONSORIZZATO</style>', '<template><p>CONTENUTO SPONSORIZZATO</p></template>', '<pre><code>CONTENUTO SPONSORIZZATO</code></pre>', '<pre>Example: CONTENUTO SPONSORIZZATO</pre>', '<aside><p>CONTENUTO SPONSORIZZATO</p></aside>', '<blockquote><p>CONTENUTO SPONSORIZZATO</p></blockquote>', '<p hidden>CONTENUTO SPONSORIZZATO</p>', '<div style="display: none"><p>CONTENUTO SPONSORIZZATO</p></div>', '<div class="embedded-widget"><p>CONTENUTO SPONSORIZZATO</p></div>', '<p>Text<br>CONTENUTO SPONSORIZZATO<br>More text</p>', '<section><div><pre>CONTENUTO SPONSORIZZATO</pre></div></section><p>' + 'Long editorial. '.repeat(60) + '</p>']) assert.equal(classify('gdc', html), 'review', html);
   for (const label of ['INFORMAZIONE PUBBLICITARIA', 'Contenuto promozionale in collaborazione con Invented Brand']) assert.equal(classify('gdc', `<p>${label}</p>`), 'review');
