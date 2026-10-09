@@ -3,7 +3,7 @@ import { classify } from './article-disclosure.mjs';
 
 if (!isMainThread) parentPort.on('message', ({ site, html }) => {
   const metrics = {};
-  try { parentPort.postMessage({ decision: classify(site, html, { metrics }), reason: metrics.limited, metrics }); }
+  try { parentPort.postMessage({ decision: classify(site, html, { metrics }), reason: metrics.limited || metrics.reason, metrics }); }
   catch { parentPort.postMessage({ decision: 'review', reason: 'unreadable-content' }); }
 });
 

@@ -26,7 +26,12 @@ function append(to, child) {
 const tailJoin = (a, b) => normalize(a + ' ' + b).slice(0, 600);
 
 export function classify(site, html, { budgetMs = 250, maxNodes = 50000, maxDepth = 128, metrics = {} } = {}) {
-  if (!labels[site] || typeof html !== 'string' || html.length > 2_000_000) return 'review';
+  // Diagnostics describe the evidence contract, never a keep/ad decision.
+  // Clear prior results if a caller reuses its metrics object.
+  delete metrics.reason; delete metrics.limited;
+  const review = reason => { metrics.reason = reason; return 'review'; };
+  if (!labels[site]) return review('unsupported-disclosure-site');
+  if (typeof html !== 'string' || html.length > 2_000_000) return review('unreadable-content');
   const deadline = performance.now() + budgetMs;
   const limit = reason => { metrics.limited = reason; return 'review'; };
   if (budgetMs <= 0) return limit('time-limit');
@@ -42,13 +47,13 @@ export function classify(site, html, { budgetMs = 250, maxNodes = 50000, maxDept
     let plain = true;
     if (node.nodeType === 1) {
       const tag = node.tagName.toUpperCase(); const attributes = node.attributes;
-      if (active.has(tag)) return 'review';
+      if (active.has(tag)) return review('document-active-content');
       for (const attribute of attributes) {
         metrics.operations++;
         if (metrics.operations % 128 === 0 && performance.now() > deadline) return limit('time-limit');
         // Case-insensitive event handlers are active even on an unrelated
         // image/link. Ordinary href/src/class/id/style attributes are not.
-        if (attribute.name.toLowerCase().startsWith('on')) return 'review';
+        if (attribute.name.toLowerCase().startsWith('on')) return review('document-active-content');
       }
       plain = supported.has(tag) && attributes.length === 0;
     }
@@ -70,6 +75,7 @@ export function classify(site, html, { budgetMs = 250, maxNodes = 50000, maxDept
       append(summary, childInfo.summary); info.plainTree &&= childInfo.plainTree; metrics.operations++;
     }
   }
+  let heldLabelReason;
   for (const node of nodes) {
     const info = metadata.get(node); let following = '';
     // Parent-first traversal shares each ancestor's already bounded suffix.
@@ -82,9 +88,13 @@ export function classify(site, html, { budgetMs = 250, maxNodes = 50000, maxDept
       metrics.operations++;
     }
     if (metrics.operations % 128 === 0 && performance.now() > deadline) return limit('time-limit');
-    if (!info.context || !info.plainTree || !['P', 'DIV', 'PRE'].includes(node.tagName) || info.tail.length >= 600) continue;
+    if (!['P', 'DIV', 'PRE'].includes(node.tagName)) continue;
     const s = info.summary;
-    if (!s.long && labels[site].test(normalize(s.text)) || node.tagName !== 'PRE' && s.br && !s.lineLong && labels[site].test(normalize(s.lastLine))) return 'block';
+    const matched = !s.long && labels[site].test(normalize(s.text)) || node.tagName !== 'PRE' && s.br && !s.lineLong && labels[site].test(normalize(s.lastLine));
+    if (!matched) continue;
+    if (!info.context || !info.plainTree) { heldLabelReason ??= 'unsupported-disclosure-context'; continue; }
+    if (info.tail.length >= 600) { heldLabelReason ??= 'unsafe-disclosure-tail'; continue; }
+    return 'block';
   }
-  return 'review';
+  return review(heldLabelReason || 'no-supported-disclosure');
 }
